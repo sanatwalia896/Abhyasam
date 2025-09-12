@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+nav button {
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+nav button:hover {
+    background-color: #218838;
+}
+
+main {
+    padding: 2rem;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    nav button {
+        display: block;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}
