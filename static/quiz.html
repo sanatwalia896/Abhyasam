@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevisionAI Quiz</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>RevisionAI Quiz</h1>
+        <nav><a href="/">Back to Home</a></nav>
+    </header>
+    <main>
+        <div id="quiz-content"></div>
+    </main>
+    <script>
+        async function loadQuiz() {
+            try {
+                const response = await fetch('/static/questions.json');
+                const questions = await response.json();
+                const content = document.getElementById('quiz-content');
+                content.innerHTML = questions.map(q => 
+                    `<p>${q.question} <input type="text" placeholder="Your answer"></p>`
+                ).join('');
+            } catch (error) {
+                document.getElementById('quiz-content').innerText = `Error: ${error.message}`;
+            }
+        }
+        window.onload = loadQuiz;
+    </script>
+</body>
+</html>

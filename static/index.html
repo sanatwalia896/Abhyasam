@@ -10,13 +10,38 @@
     <header>
         <h1>RevisionAI</h1>
         <nav>
-            <button onclick="loadQuiz()">Generate Quiz</button>
-            <button onclick="askQuestion()">Ask a Question</button>
+            <button onclick="showTab('home')">Home</button>
+            <button onclick="showTab('chat')">Chat</button>
+            <button onclick="showTab('settings')">Settings</button>
         </nav>
     </header>
     <main>
-        <div id="content">Welcome to Abhyasam! Click a button to start.</div>
-        <div><button onclick="refreshPages()">Refresh Notion</button></div>
+        <div id="home" class="tab-content">
+            <h2>Welcome to RevisionAI</h2>
+            <button onclick="refreshPages()">Refresh Notion Pages</button>
+            <button onclick="loadNotionPages()">View Pages</button>
+            <div id="page-list"></div>
+        </div>
+        <div id="chat" class="tab-content" style="display: none;">
+            <h2>Chat with Your Notes</h2>
+            <div id="chat-history" style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
+            <input type="text" id="chat-input" placeholder="Ask a question..." style="width: 80%; padding: 8px;">
+            <button onclick="sendQuestion()">Send</button>
+        </div>
+        <div id="settings" class="tab-content" style="display: none;">
+            <h2>Settings</h2>
+            <label for="page-select">Select Notion Page:</label>
+            <select id="page-select">
+                <option value="">All Pages</option>
+            </select><br>
+            <label for="model-select">Select Groq Model:</label>
+            <select id="model-select">
+                <option value="llama3-8b-8192">LLaMA3 8B</option>
+                <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+            </select><br>
+            <button onclick="saveSettings()">Save Settings</button>
+            <button onclick="generateQuiz()">Generate Quiz</button>
+        </div>
     </main>
     <script src="/static/js/script.js"></script>
 </body>

@@ -27,12 +27,32 @@ nav button:hover {
 
 main {
     padding: 2rem;
-    text-align: center;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+#chat-history {
+    background: #fff;
+    margin-bottom: 10px;
+}
+
+#chat-input {
+    margin-right: 10px;
+}
+
+select, button {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
 }
 
 @media (max-width: 600px) {
-    nav button {
-        display: block;
+    nav button, select, #chat-input, button {
         width: 100%;
         margin: 0.5rem 0;
     }
