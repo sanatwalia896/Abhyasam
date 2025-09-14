@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 class NotionPageLoader:
-    """Handles fetching and caching Notion pages for RevisionAI collections."""
+    """Handles fetching and caching Notion pages for Abhyasam collections."""
     
     def __init__(self, token: str, parent_page_id: Optional[str] = None, cache_file: str = "cached_pages.json", notion_version: str = "2022-06-28"):
         """
