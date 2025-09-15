@@ -7,6 +7,10 @@ from langchain_core.documents import Document
 loader = NotionPageLoader(os.getenv("NOTION_TOKEN"))
 page_ids = loader.search_all_pages()
 pageid_with_title={}
+
+for id in page_ids:
+    page_title=loader.get_page_title(id)
+    pageid_with_title[page_title]=id
 for id in range(len(page_ids)):
     page_title=loader.get_page_title(page_ids[id])
     
@@ -22,18 +26,13 @@ for id in range(len(page_ids)):
     "chunk_id": id
     })
 
+block=loader.get_page_blocks(pageid_with_title['USEFUL CODE SNIPPETS'])
+contrnt=''
+for blocks in block:
+    content = "\n".join([b["text"] for b in blocks])
 
-for id in page_ids:
-    page_title=loader.get_page_title(id)
-    pageid_with_title[page_title]=id
-    
-# # print(pageid_with_title)
-# filename='content.txt'
-# with open(filename,'w+') as f:
-#     f.write(str(content))
+print(str(content))
 
-# file_path=Path(filename)
-# print('the file path is',file_path)
 
 
 
