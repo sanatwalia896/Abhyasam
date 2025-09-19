@@ -34,7 +34,7 @@ class AbhyasamRAG:
         index_name: str = "abhyasam-index",
         cloud: str = "aws",
         region: str = "us-east-1",
-        namespace: str = "rag",
+        namespace: str = "notion-knowledge",
     ):
         """Initialize Pinecone with HuggingFace embeddings."""
         self.pc = Pinecone(api_key=api_key)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     # Init loaders
     notion_loader = NotionPageLoader(os.getenv("NOTION_TOKEN"))
-    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+    splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=200)
 
     # Fetch Notion pages
     page_ids = notion_loader.search_all_pages()
