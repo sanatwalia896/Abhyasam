@@ -101,6 +101,7 @@ if __name__ == "__main__":
             page_content=content,
             metadata={
                 "source": "Notion",
+                "page_title": page_title
             },
         )
 

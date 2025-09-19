@@ -1,33 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RevisionAI Quiz</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abhyasam Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/quiz.css">
 </head>
 <body>
+  <div id="particles"></div>
+
+  <!-- Start Screen -->
+  <div id="start-screen" class="screen active">
+    <div class="start-container">
+      <div class="logo-section">
+        <i class="fas fa-brain"></i>
+        <h1>Abhyasam Quiz</h1>
+        <p>Test your knowledge with questions from your Notion notes</p>
+      </div>
+      <div class="quiz-info">
+        <div class="info-item">
+          <i class="fas fa-clock"></i>
+          <span>90 Minutes</span>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-question-circle"></i>
+          <span>30 Questions</span>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-trophy"></i>
+          <span>Get Your Score</span>
+        </div>
+      </div>
+      <div class="navigation">
+        <a href="/" class="action-btn"><i class="fas fa-home"></i> Back to Home</a>
+        <a id="chat-link" href="/chat" class="action-btn"><i class="fas fa-comment-dots"></i> Ask Questions</a>
+      </div>
+      <button id="start-btn" class="action-btn"><i class="fas fa-play"></i> Start Quiz</button>
+    </div>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="quiz-screen" class="screen">
     <header>
-        <h1>RevisionAI Quiz</h1>
-        <nav><a href="/">Back to Home</a></nav>
+      <div class="header-left">
+        <h1><i class="fas fa-brain"></i> Abhyasam Quiz</h1>
+        <span id="question-counter">Question 1 of 30</span>
+      </div>
+      <div class="timer">
+        <i class="fas fa-hourglass-half"></i>
+        <span id="timer-display">90:00</span>
+      </div>
     </header>
+    <section class="progress-container">
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+      <span id="progress-text">0% Complete</span>
+    </section>
     <main>
-        <div id="quiz-content"></div>
+      <div class="quiz-container">
+        <div class="question-container">
+          <div class="question-header">
+            <span id="question-number">Question 1 of 30</span>
+          </div>
+          <h2 id="question-text"></h2>
+        </div>
+        <div id="options-container" class="options-container"></div>
+        <div class="navigation-container">
+          <div class="nav-buttons">
+            <button id="prev-btn" class="nav-btn prev-btn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="next-btn" class="nav-btn next-btn">Next <i class="fas fa-arrow-right"></i></button>
+          </div>
+          <button id="submit-btn" class="action-btn hidden">Submit Quiz <i class="fas fa-check"></i></button>
+        </div>
+      </div>
     </main>
-    <script>
-        async function loadQuiz() {
-            try {
-                const response = await fetch('/static/questions.json');
-                const questions = await response.json();
-                const content = document.getElementById('quiz-content');
-                content.innerHTML = questions.map(q => 
-                    `<p>${q.question} <input type="text" placeholder="Your answer"></p>`
-                ).join('');
-            } catch (error) {
-                document.getElementById('quiz-content').innerText = `Error: ${error.message}`;
-            }
-        }
-        window.onload = loadQuiz;
-    </script>
+    <div class="floating-actions">
+      <button id="bookmark-btn" class="fab bookmark-btn"><i class="fas fa-bookmark"></i></button>
+      <button id="fullscreen-btn" class="fab fullscreen-btn"><i class="fas fa-expand"></i></button>
+    </div>
+    <button id="show-nav-btn" class="show-nav-btn"><i class="fas fa-th"></i></button>
+    <aside id="question-nav" class="question-navigator hidden">
+      <div class="nav-header">
+        <h3>Question Navigator</h3>
+        <button id="close-nav" class="close-btn"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="question-grid" class="question-grid"></div>
+      <div class="nav-legend">
+        <div class="legend-item"><span class="dot answered"></span> Answered</div>
+        <div class="legend-item"><span class="dot bookmarked"></span> Bookmarked</div>
+        <div class="legend-item"><span class="dot current"></span> Current</div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Results Screen -->
+  <div id="results-screen" class="screen">
+    <div class="results-container">
+      <div class="results-header">
+        <i class="fas fa-trophy"></i>
+        <h1 id="score-percentage">0%</h1>
+        <h2>Score</h2>
+        <p>Quiz Completed!</p>
+        <p>Great job on completing the quiz!</p>
+      </div>
+      <div class="results-stats">
+        <div class="stat-item">
+          <i class="fas fa-check-circle"></i>
+          <span id="correct-answers">0</span>
+          <p>Correct</p>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-times-circle"></i>
+          <span id="incorrect-answers">0</span>
+          <p>Incorrect</p>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-clock"></i>
+          <span id="time-taken">00:00</span>
+          <p>Time Taken</p>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-chart-pie"></i>
+          <span id="accuracy-rate">0%</span>
+          <p>Accuracy</p>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button id="review-btn" class="action-btn"><i class="fas fa-search"></i> Review Answers</button>
+        <button id="restart-btn" class="action-btn"><i class="fas fa-redo"></i> Retake Quiz</button>
+        <button id="share-btn" class="action-btn"><i class="fas fa-share-alt"></i> Share Results</button>
+        <a href="/" class="action-btn"><i class="fas fa-home"></i> Back to Home</a>
+        <a id="chat-link" href="/chat" class="action-btn"><i class="fas fa-comment-dots"></i> Ask Questions</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Screen -->
+  <div id="review-screen" class="screen">
+    <header class="review-header">
+      <h1><i class="fas fa-search"></i> Review Your Answers</h1>
+      <button id="close-review" class="close-btn"><i class="fas fa-times"></i></button>
+    </header>
+    <main id="review-content" class="review-content"></main>
+  </div>
+
+  <!-- Submit Modal -->
+  <div id="submit-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Submit Quiz?</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to submit your quiz? You won't be able to change your answers after submission.</p>
+        <div class="modal-stats">
+          <div class="modal-stat">
+            <span class="stat-label">Answered:</span>
+            <span id="modal-answered">0/30</span>
+          </div>
+          <div class="modal-stat">
+            <span class="stat-label">Time Remaining:</span>
+            <span id="modal-time">90:00</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="cancel-submit" class="modal-btn cancel-btn"><i class="fas fa-times"></i> Cancel</button>
+        <button id="confirm-submit" class="modal-btn confirm-btn"><i class="fas fa-check"></i> Submit Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loader">
+      <i class="fas fa-brain brain-loader"></i>
+      <p>Loading Quiz...</p>
+    </div>
+  </div>
+
+  <script src="/static/js/quiz.js"></script>
+  <script>
+    // Set chat link with page_title from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageTitle = urlParams.get('page_title');
+    if (pageTitle) {
+      document.getElementById('chat-link').href = `/chat?page_title=${encodeURIComponent(pageTitle)}`;
+    }
+  </script>
 </body>
 </html>

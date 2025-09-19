@@ -84,6 +84,7 @@ def populate_new_pages():
                 page_content=content,
                 metadata={
                     "source": "Notion",
+                    "page_title": page_title
 
                 },
             )

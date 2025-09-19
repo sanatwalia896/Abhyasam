@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abhyasam</title>
+  <title>RevisionAI Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="stylesheet" href="/static/css/chat.css">
 </head>
 <body>
   <div id="particles"></div>
-  <div class="container">
+  <div class="chat-container">
     <header>
-      <h1><i class="fas fa-brain"></i> Abhyasam</h1>
-      <p>Revise your Notion notes with interactive quizzes or Q&A</p>
+      <h1><i class="fas fa-brain"></i> Abhyasam Chat</h1>
+      <p>Ask questions about your Notion notes or generate a quiz</p>
     </header>
     <main>
       <div class="controls">
@@ -22,16 +22,21 @@
         </select>
         <button id="refresh-btn" class="action-btn"><i class="fas fa-sync"></i> Refresh Pages</button>
       </div>
-      <div class="actions">
-        <button id="quiz-btn" class="action-btn" disabled><i class="fas fa-question-circle"></i> Start Quiz</button>
-        <button id="chat-btn" class="action-btn" disabled><i class="fas fa-comment-dots"></i> Ask Questions</button>
+      <div class="navigation">
+        <a href="/" class="action-btn"><i class="fas fa-home"></i> Back to Home</a>
+        <a id="quiz-link" href="/quiz" class="action-btn"><i class="fas fa-question-circle"></i> Take Quiz</a>
+      </div>
+      <div id="chat-area" class="chat-area"></div>
+      <div class="input-container">
+        <input type="text" id="question-input" class="input-field" placeholder="Ask a question or type 'quiz' to generate a quiz...">
+        <button id="send-btn" class="action-btn"><i class="fas fa-paper-plane"></i> Send</button>
       </div>
       <div id="loading" class="loading hidden">
-        <i class="fas fa-spinner fa-spin"></i> Loading...
+        <i class="fas fa-spinner fa-spin"></i> Processing...
       </div>
     </main>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script src="/static/js/index.js"></script>
+  <script src="/static/js/chat.js"></script>
 </body>
 </html>
