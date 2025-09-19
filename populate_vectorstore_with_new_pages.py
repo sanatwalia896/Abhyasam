@@ -3,13 +3,14 @@ import os
 import json
 from typing import List
 from langchain_core.documents import Document
-from langchain_huggingface import HuggingFaceInferenceAPIEmbeddings
-
-from langchain_pinecone import PineconeVectorStore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from notion_loader import NotionPageLoader
 from dotenv import load_dotenv
 from populate_vectors import AbhyasamRAG
+from uuid import uuid4
+from langchain_core.documents import Document
+from langchain_pinecone import PineconeVectorStore
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 
 # Load environment variables
 load_dotenv()
@@ -61,17 +62,7 @@ def populate_new_pages():
         print("No new pages found.")
         return
 
-    # Initialize embeddings and vector store
-    embeddings = HuggingFaceInferenceAPIEmbeddings(
-    api_key=hf_token,  # make sure you set this in .env
-    model_name="sentence-transformers/all-MiniLM-L6-v2",
-)
-    # vectorstore = PineconeVectorStore.from_existing_index(
-    #     index_name=index_name,
-    #     embedding=embeddings,
-    #     namespace="notion-knowledge",
-    #     pinecone_api_key=pinecone_api_key
-    # )
+    
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
 
     # Process new pages
@@ -93,9 +84,7 @@ def populate_new_pages():
                 page_content=content,
                 metadata={
                     "source": "Notion",
-                    "page_title": page_title,
-                    "page_id": page_id,
-                    "chunk_id": idx,
+
                 },
             )
 
