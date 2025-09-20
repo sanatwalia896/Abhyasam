@@ -6,6 +6,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatArea = document.getElementById('chat-area');
   const quizLink = document.getElementById('quiz-link');
   const loading = document.getElementById('loading');
+  const quizGenerationModal = document.createElement('div');
+  quizGenerationModal.id = 'quiz-generation-modal';
+  quizGenerationModal.className = 'modal hidden';
+  quizGenerationModal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Generating Quiz</h3>
+      </div>
+      <div class="modal-body">
+        <div class="loader">
+          <i class="fas fa-brain brain-loader"></i>
+          <p id="generation-message">Generating questions, please wait...</p>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(quizGenerationModal);
+  const generationMessage = quizGenerationModal.querySelector('#generation-message');
 
   // Initialize particles.js
   particlesJS('particles', {
@@ -82,6 +100,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  async function generateQuiz() {
+    quizGenerationModal.classList.remove('hidden');
+    generationMessage.textContent = `Generating questions for ${pageSelect.value}, please wait...`;
+    try {
+      const response = await fetch('/api/generate-quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topic_query: pageSelect.options[pageSelect.selectedIndex].text,
+          num_batches: 3,
+          questions_per_batch: 10,
+          page_title: pageSelect.value
+        })
+      });
+      const result = await response.json();
+      if (result.status === 'success') {
+        generationMessage.textContent = `Generated ${result.questions_count} questions in ${result.generation_time}s!`;
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Brief pause to show success
+        return result;
+      } else {
+        throw new Error(result.detail || 'Failed to generate quiz');
+      }
+    } catch (error) {
+      console.error('Error generating quiz:', error);
+      alert(`Failed to generate quiz: ${error.message}`);
+      throw error;
+    } finally {
+      quizGenerationModal.classList.add('hidden');
+    }
+  }
+
   async function sendQuestion() {
     const question = questionInput.value.trim();
     if (!question) {
@@ -93,32 +142,22 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message user';
-    messageDiv.textContent = question;
-    chatArea.appendChild(messageDiv);
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.className = 'message user';
+    userMessageDiv.textContent = question;
+    chatArea.appendChild(userMessageDiv);
     chatArea.scrollTop = chatArea.scrollHeight;
     loading.classList.remove('hidden');
 
     if (question.toLowerCase() === 'quiz') {
       try {
-        const response = await fetch('/api/generate-quiz', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ topic_query: pageSelect.options[pageSelect.selectedIndex].text, page_title: pageSelect.value })
-        });
-        const result = await response.json();
-        if (result.status === 'success') {
-          const messageDiv = document.createElement('div');
-          messageDiv.className = 'message ai';
-          messageDiv.innerHTML = `Quiz generated for ${pageSelect.value}! <a href="/quiz?page_title=${encodeURIComponent(pageSelect.value)}">Take the quiz</a>`;
-          chatArea.appendChild(messageDiv);
-          chatArea.scrollTop = chatArea.scrollHeight;
-        } else {
-          alert('Error generating quiz');
-        }
+        const result = await generateQuiz();
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message ai';
+        messageDiv.innerHTML = marked.parse(`Quiz generated for **${pageSelect.value}**! [Take the quiz](/quiz?page_title=${encodeURIComponent(pageSelect.value)})`);
+        chatArea.appendChild(messageDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
       } catch (error) {
-        console.error('Error generating quiz:', error);
         alert('Failed to generate quiz.');
       }
     } else {
@@ -132,11 +171,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (result.status === 'success') {
           const messageDiv = document.createElement('div');
           messageDiv.className = 'message ai';
-          messageDiv.textContent = result.answer;
+          // Parse the response as Markdown using marked.js
+          try {
+            messageDiv.innerHTML = marked.parse(result.answer);
+          } catch (e) {
+            console.error('Markdown parsing error:', e);
+            // Fallback: display plain text if Markdown parsing fails
+            messageDiv.textContent = result.answer;
+          }
           chatArea.appendChild(messageDiv);
           chatArea.scrollTop = chatArea.scrollHeight;
         } else {
-          alert('Error getting response');
+          alert('Error getting response: ' + (result.detail || 'Unknown error'));
         }
       } catch (error) {
         console.error('Error sending question:', error);
@@ -154,5 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') sendQuestion();
   });
 
+  // Load pages on page load
   loadPages();
 });

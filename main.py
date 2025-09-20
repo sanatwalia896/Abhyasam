@@ -26,7 +26,7 @@ app = FastAPI(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Initialize chatbot
-chatbot = AbhyasamChat(model_name="mixtral-8x7b-32768")
+chatbot = AbhyasamChat(model_name="openai/gpt-oss-120b")
 
 # Pydantic models for request validation
 class AskRequest(BaseModel):

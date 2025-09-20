@@ -42,7 +42,7 @@ class AbhyasamChat:
         # Base retriever (updated in methods to include page_title filter)
         self.retriever = self.vectorstore.as_retriever(
             search_type="mmr",
-            search_kwargs={"k": 6, "lambda_mult": 0.25}
+            search_kwargs={"k": 6, "lambda_mult": 0.25,"namespace":"notion-knowledge"}
         )
 
         # Prompt for question answering
@@ -112,66 +112,7 @@ class AbhyasamChat:
             logger.error(f"Error in chat: {e}")
             return {"answer": "⚠️ Something went wrong."}
 
-    def generate_quiz(self, topic_query: str = "key concepts", num_batches: int = 3, questions_per_batch: int = 10, page_title: str = None) -> List[Dict]:
-        """Generate MCQ quizzes for a specific page_title and dump to questions.json."""
-        all_questions = []
-        try:
-            # Set filter for retriever
-            filter_dict = {"source": "Notion"}
-            if page_title:
-                filter_dict["page_title"] = page_title
-                logger.info(f"Generating quiz for page_title: {page_title}")
-
-            # Retrieve context
-            docs = self.retriever.invoke(topic_query, filter=filter_dict)
-            context = "\n\n".join([doc.page_content for doc in docs])
-
-            if not context:
-                logger.warning("No context retrieved for quiz generation.")
-                return []
-
-            # Generate quizzes in batches
-            for batch in range(num_batches):
-                logger.info(f"Generating quiz batch {batch + 1}/{num_batches}")
-                result = self.quiz_chain.invoke({
-                    "context": context,
-                    "num_questions": questions_per_batch
-                })
-                all_questions.extend(result)
-
-            # Limit to 30 questions
-            all_questions = all_questions[:30]
-
-            # Validate and format questions
-            formatted_questions = []
-            for q in all_questions:
-                if (
-                    isinstance(q, dict) and
-                    "question" in q and
-                    "options" in q and
-                    isinstance(q["options"], dict) and
-                    all(k in q["options"] for k in ["A", "B", "C", "D"]) and
-                    "answer" in q and
-                    q["answer"] in ["A", "B", "C", "D"]
-                ):
-                    formatted_questions.append(q)
-                else:
-                    logger.warning(f"Invalid question format: {q}")
-
-            # Dump to questions.json in static folder
-            with open("static/questions.json", "w") as f:
-                json.dump(formatted_questions, f, indent=2)
-            logger.info(f"Dumped {len(formatted_questions)} questions to static/questions.json")
-
-            return formatted_questions
-        except Exception as e:
-            logger.error(f"Error in quiz generation: {e}")
-            return []
+    
 
 if __name__ == "__main__":
     chat = AbhyasamChat()
-    # Example: Test with a specific page title
-    response = chat.ask_question("What is the capital of France?", page_title="Geography Notes")
-    print(response)
-    quiz = chat.generate_quiz(page_title="Geography Notes")
-    print(quiz)

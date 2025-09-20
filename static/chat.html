@@ -6,14 +6,17 @@
   <title>RevisionAI Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
   <link rel="stylesheet" href="/static/css/chat.css">
 </head>
 <body>
   <div id="particles"></div>
   <div class="chat-container">
-    <header>
-      <h1><i class="fas fa-brain"></i> Abhyasam Chat</h1>
-      <p>Ask questions about your Notion notes or generate a quiz</p>
+    <header class="chat-header">
+      <div class="header-content">
+        <h1><i class="fas fa-brain"></i> Abhyasam Chat</h1>
+        <p class="header-subtitle">Ask questions about your Notion notes or generate a quiz</p>
+      </div>
     </header>
     <main>
       <div class="controls">
@@ -37,6 +40,8 @@
     </main>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
   <script src="/static/js/chat.js"></script>
 </body>
 </html>

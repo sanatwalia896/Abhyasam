@@ -1,13 +1,19 @@
 :root {
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
+  --primary-gradient: linear-gradient(135deg, #2E8B57 0%, #1E5D3A 100%);
+  --success-gradient: linear-gradient(135deg, #FF6F61 0%, #FF8C42 100%);
+  --header-gradient: linear-gradient(90deg, #3A4D6B 0%, #2A3A5F 100%);
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
   --shadow-light: 0 8px 32px rgba(0, 0, 0, 0.1);
   --shadow-medium: 0 12px 40px rgba(0, 0, 0, 0.15);
   --border-radius: 16px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all 0.3s ease-out;
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --spacing-sm: 10px;
+  --spacing-md: 20px;
+  --text-color: #E0E7FF;
+  --accent-color: #FF6F61;
+  --code-color: #00D4A5;
 }
 
 * {
@@ -35,82 +41,95 @@ body {
 
 .container {
   max-width: 600px;
-  margin: 40px auto;
+  margin: var(--spacing-md) auto;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: var(--border-radius);
-  padding: 40px;
+  padding: var(--spacing-md);
   box-shadow: var(--shadow-medium);
   text-align: center;
   position: relative;
   z-index: 2;
+  animation: fadeIn 0.5s ease-out;
 }
 
 header h1 {
   font-size: 2.5rem;
-  color: white;
+  color: var(--text-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: var(--spacing-sm);
 }
 
 header p {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 30px;
+  margin-bottom: var(--spacing-md);
 }
 
 .controls {
   display: flex;
-  gap: 15px;
-  margin-bottom: 30px;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .input-field {
   flex: 1;
-  padding: 12px;
-  border-radius: 10px;
-  border: 2px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-color);
+  border: 1px solid var(--glass-border);
   font-size: 1rem;
+  transition: var(--transition);
+}
+
+.input-field:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 111, 97, 0.5);
 }
 
 .action-btn {
-  padding: 12px 24px;
-  border-radius: 10px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-sm);
   border: none;
-  color: white;
+  color: var(--text-color);
   background: var(--success-gradient);
 }
 
 .action-btn:disabled {
   background: rgba(255, 255, 255, 0.1);
   cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.action-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-light);
 }
 
 .actions {
   display: flex;
-  gap: 15px;
+  gap: var(--spacing-sm);
   justify-content: center;
 }
 
 .loading {
-  margin-top: 20px;
-  color: white;
+  margin-top: var(--spacing-md);
+  color: var(--text-color);
   font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--spacing-sm);
 }
 
 .loading.hidden {
@@ -118,9 +137,33 @@ header p {
 }
 
 @media (max-width: 768px) {
-  .container { margin: 20px; padding: 20px; }
-  header h1 { font-size: 1.8rem; }
-  .controls { flex-direction: column; }
-  .actions { flex-direction: column; }
-  .action-btn { width: 100%; justify-content: center; }
+  .container {
+    margin: var(--spacing-sm);
+    padding: var(--spacing-sm);
+  }
+  header h1 {
+    font-size: 1.8rem;
+  }
+  .controls {
+    flex-direction: column;
+  }
+  .actions {
+    flex-direction: column;
+  }
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
