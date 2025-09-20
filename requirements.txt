@@ -11,8 +11,10 @@ langchain-ollama==0.3.6
 langchain-qdrant==0.2.1
 
 pinecone-client==6.0.0
-pydantic
-langchian_community
+pinecone
+langchain_community
+
+
 huggingface-hub==0.34.4
 transformers==4.56.1
 sentence-transformers==5.1.0
