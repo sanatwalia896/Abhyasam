@@ -1,0 +1,302 @@
+[
+  {
+    "question": "What does the Integration feature of LangChain provide?",
+    "options": [
+      "Pre-built integrations with various LLM providers, data sources, and tools",
+      "Automatic model training on user data",
+      "Real-time sentiment analysis of responses",
+      "Built-in visualizations for model performance"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Which of the following is an example of use\u2011case optimization offered by LangChain?",
+    "options": [
+      "Generating random numbers for simulations",
+      "Optimized chains for question answering, summarization, and chat",
+      "Compiling source code into executable binaries",
+      "Encrypting data using asymmetric keys"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "In LangChain, what is the purpose of the \"Language Models\" component?",
+    "options": [
+      "To store conversation history in memory",
+      "To provide wrappers around LLMs from providers like OpenAI, Anthropic, Cohere, etc.",
+      "To define custom UI widgets for user interaction",
+      "To manage file system operations for data ingestion"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "What role do \"Prompts\" play in LangChain?",
+    "options": [
+      "They act as templates and tools for creating and managing prompts",
+      "They handle authentication with external APIs",
+      "They compress large documents into embeddings",
+      "They schedule periodic model retraining"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "In the provided decision function `should_refine`, what value is returned when `state[\"needs_refinement\"]` is true?",
+    "options": [
+      "\"end\"",
+      "\"continue\"",
+      "\"refine\"",
+      "\"stop\""
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which field is NOT part of the `CalculatorInput` model for the custom calculator tool?",
+    "options": [
+      "operation",
+      "a",
+      "b",
+      "result"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "What is the description of the `CalculatorTool` class?",
+    "options": [
+      "A tool for retrieving documents from a vector store",
+      "Useful for performing mathematical calculations",
+      "A memory system that stores chat history",
+      "A wrapper for sending HTTP requests"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "What type of memory is created with `ConversationBufferMemory` in the example?",
+    "options": [
+      "Long\u2011term knowledge graph memory",
+      "ConversationBufferMemory that returns messages",
+      "Vector store memory for document embeddings",
+      "Cache memory for model weights"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "The `ConversationalRetrievalChain.from_llm` call combines which three components?",
+    "options": [
+      "LLM, retriever, and memory",
+      "LLM, optimizer, and tokenizer",
+      "Retriever, transformer, and scheduler",
+      "Memory, logger, and debugger"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "When the conversational QA chain is invoked with the question \"What is the main topic of this document?\", where does the answer come from?",
+    "options": [
+      "The hard\u2011coded response in the code",
+      "The LLM combined with retrieved documents and conversation memory",
+      "A random generator seeded by the system clock",
+      "The `CalculatorTool` performing a calculation"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following is NOT listed as a key component of LangChain?",
+    "options": [
+      "Language Models",
+      "Prompts",
+      "Data Visualization",
+      "Tools"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What does the \"Integration\" feature of LangChain provide?",
+    "options": [
+      "Custom neural network training",
+      "Pre\u2011built integrations with LLM providers, data sources, and tools",
+      "Automatic code generation for mobile apps",
+      "Real\u2011time video streaming"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which use\u2011case is explicitly mentioned as having an optimized chain in LangChain?",
+    "options": [
+      "Image classification",
+      "Question answering",
+      "Speech synthesis",
+      "Time\u2011series forecasting"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "In the provided code, what type of object does the variable `document` contain?",
+    "options": [
+      "A string with plain text",
+      "A dictionary with metadata",
+      "An instance of `Document` with a `page_content` attribute",
+      "A pandas DataFrame"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "The function `should_refine` returns \"refine\" when:",
+    "options": [
+      "state[\"needs_refinement\"] is True",
+      "state[\"needs_refinement\"] is False",
+      "the input is a string containing the word \"refine\"",
+      "the function always returns \"end\""
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Which of the following fields is NOT part of the `CalculatorInput` schema?",
+    "options": [
+      "operation",
+      "a",
+      "b",
+      "result"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "What is the purpose of the `ConversationBufferMemory` in the example?",
+    "options": [
+      "To store the LLM weights",
+      "To keep a history of the conversation for the chain",
+      "To cache API responses from external services",
+      "To manage file system paths"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which class is used to create a conversational QA chain in the snippet?",
+    "options": [
+      "ConversationalRetrievalChain",
+      "RetrievalAugmentedGenerationChain",
+      "LLMChain",
+      "PromptTemplate"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "In the fake database example, what will be returned if the query contains the word \"warranty\"?",
+    "options": [
+      "\"The product dimensions are 10x15x5 inches and it weighs 3.5 pounds\"",
+      "\"The product comes with a 2-year limited warranty\"",
+      "\"No relevant information found in the database.\"",
+      "\"The product is out of stock\""
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which LLM providers are explicitly mentioned as being wrapped by LangChain's Language Model component?",
+    "options": [
+      "Google, Microsoft, Amazon",
+      "OpenAI, Anthropic, Cohere",
+      "IBM Watson, Baidu, Tencent",
+      "Meta, DeepMind, OpenAI"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following best describes the purpose of LangChain's integration feature?",
+    "options": [
+      "To provide pre-built integrations with various LLM providers, data sources, and tools",
+      "To create custom neural network architectures",
+      "To perform low-level hardware optimization",
+      "To generate synthetic training data"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is meant by \"use\u2011case optimization\" in LangChain?",
+    "options": [
+      "Automatically tuning hyper\u2011parameters of LLMs",
+      "Providing optimized chains for common tasks such as question answering, summarization, and chat",
+      "Compressing model weights for faster inference",
+      "Translating prompts into multiple languages"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which component of LangChain is responsible for wrapping LLMs from providers such as OpenAI, Anthropic, and Cohere?",
+    "options": [
+      "Prompts",
+      "Memory",
+      "Language Models",
+      "Tools"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "In the provided code, what does the function `should_refine` return when `state[\"needs_refinement\"]` is false?",
+    "options": [
+      "\"refine\"",
+      "\"end\"",
+      "\"continue\"",
+      "\"stop\""
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which field in the `CalculatorInput` model describes the type of mathematical operation to perform?",
+    "options": [
+      "operation",
+      "a",
+      "b",
+      "description"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "What is the purpose of the `ConversationBufferMemory` component in the example?",
+    "options": [
+      "To store the LLM weights",
+      "To keep a history of the conversation for context",
+      "To retrieve documents from a vector store",
+      "To execute mathematical calculations"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "When querying the fake database, which of the following statements is true?",
+    "options": [
+      "The query must match the keyword case\u2011sensitively",
+      "The function returns the first matching keyword's information regardless of order",
+      "If no keyword matches, the function raises an exception",
+      "The function always returns the entire database as a JSON string"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which LangChain class is used to create a chain that can answer questions based on retrieved documents while remembering the chat history?",
+    "options": [
+      "LLMChain",
+      "ConversationalRetrievalChain",
+      "SimpleSequentialChain",
+      "PromptTemplate"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "In the example document list, what is the `page_content` of the second document?",
+    "options": [
+      "\"Tokyo is the capital of Japan and the most populous metropolitan area in the world.\"",
+      "\"Beijing is the capital of China and contains the Forbidden City.\"",
+      "\"The product dimensions are 10x15x5 inches and it weighs 3.5 pounds\"",
+      "\"The product comes with a 2-year limited warranty\""
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following best describes a \"tool\" in LangChain, as illustrated by the `CalculatorTool` class?",
+    "options": [
+      "A pre\u2011trained LLM model",
+      "A reusable component that performs a specific external function, such as calculations",
+      "A memory buffer for storing conversation history",
+      "A prompt template for generating text"
+    ],
+    "answer": 1
+  }
+]

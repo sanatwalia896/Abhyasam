@@ -40,6 +40,15 @@ class QuizRequest(BaseModel):
     questions_per_batch: int = 10
     page_title: Optional[str] = None
 
+class StartQuizRequest(BaseModel):
+    num_questions: int
+    session_id: str = "student1"
+    page_title: Optional[str] = None
+
+class SubmitAnswerRequest(BaseModel):
+    answer: str
+    session_id: str = "student1"
+
 # Serve index page
 @app.get("/", response_class=HTMLResponse)
 async def serve_index():
@@ -176,7 +185,33 @@ async def chat(req: AskRequest):
         logger.error(f"Error in chat: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to process question: {str(e)}")
 
-# Generate quiz endpoint
+# Start interactive quiz endpoint
+@app.post("/api/start-quiz")
+async def start_quiz(req: StartQuizRequest):
+    """Start an interactive open-ended quiz with the specified number of questions."""
+    try:
+        if req.num_questions < 1:
+            raise HTTPException(status_code=400, detail="Number of questions must be at least 1")
+        response = chatbot.start_interactive_quiz(req.session_id, req.num_questions, req.page_title)
+        return JSONResponse(response)
+    except Exception as e:
+        logger.error(f"Error starting quiz: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to start quiz: {str(e)}")
+
+# Submit quiz answer endpoint
+@app.post("/api/submit-quiz-answer")
+async def submit_quiz_answer(req: SubmitAnswerRequest):
+    """Submit an answer to the current quiz question and get feedback or next question."""
+    try:
+        if not req.answer.strip():
+            raise HTTPException(status_code=400, detail="Answer cannot be empty")
+        response = chatbot.submit_quiz_answer(req.session_id, req.answer)
+        return JSONResponse(response)
+    except Exception as e:
+        logger.error(f"Error submitting quiz answer: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to submit answer: {str(e)}")
+
+# Generate quiz endpoint (keeping for MCQ mode if needed, but not used in new flow)
 @app.post("/api/generate-quiz")
 async def generate_quiz(req: QuizRequest):
     """Generate a new MCQ quiz for a specific page and overwrite questions.json."""
