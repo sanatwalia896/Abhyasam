@@ -13,10 +13,7 @@ pinecone
 langchain_community
 
 
-huggingface-hub
 
-torch
-tiktoken
 
 python-dotenv
-orjson
+
