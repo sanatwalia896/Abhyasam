@@ -15,5 +15,14 @@ langchain_community
 
 
 
+python-dotenvfastapi
+uvicorn
 python-dotenv
+langchain
+langchain-groq
+langchain-pinecone
+langchain-huggingface
+pinecone-client
+pydantic
+requests
 
