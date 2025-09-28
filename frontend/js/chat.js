@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const API_BASE = 'http://127.0.0.1:8000';
+  const API_BASE = 'https://abhyasam.onrender.com';
   const pageSelect = document.getElementById('page-select');
   const refreshBtn = document.getElementById('refresh-btn');
   const questionInput = document.getElementById('question-input');
