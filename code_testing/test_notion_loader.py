@@ -1,6 +1,6 @@
 import os 
 from pathlib import Path
-from notion_loader import  NotionPageLoader
+from backend.notion_loader import  NotionPageLoader
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document

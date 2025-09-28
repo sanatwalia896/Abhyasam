@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const API_BASE = 'http://127.0.0.1:8000';
   const pageSelect = document.getElementById('page-select');
   const refreshBtn = document.getElementById('refresh-btn');
   const questionInput = document.getElementById('question-input');
@@ -24,8 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   `;
   document.body.appendChild(quizGenerationModal);
   const generationMessage = quizGenerationModal.querySelector('#generation-message');
-
-  // Initialize particles.js
+  
   particlesJS('particles', {
     particles: {
       number: { value: 50, density: { enable: true, value_area: 800 } },
@@ -38,14 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
     interactivity: { detect_on: 'canvas', events: { onhover: { enable: false } } }
   });
 
-  // Get page_title from URL
   const urlParams = new URLSearchParams(window.location.search);
   const pageTitle = urlParams.get('page_title');
 
   async function loadPages() {
     loading.classList.remove('hidden');
     try {
-      const response = await fetch('/api/notion-pages');
+      const response = await fetch(`${API_BASE}/api/notion-pages`);
       const data = await response.json();
       if (data.status === 'success') {
         pageSelect.innerHTML = '<option value="">Select a Notion page</option>';
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function refreshPages() {
     loading.classList.remove('hidden');
     try {
-      const response = await fetch('/api/refresh-notion', {
+      const response = await fetch(`${API_BASE}/api/refresh-notion`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ force: true })
@@ -94,9 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateQuizLink() {
     const selectedTitle = pageSelect.value || pageTitle;
     if (selectedTitle) {
-      quizLink.href = `/quiz?page_title=${encodeURIComponent(selectedTitle)}`;
+      quizLink.href = `/quiz.html?page_title=${encodeURIComponent(selectedTitle)}`;
     } else {
-      quizLink.href = '/quiz';
+      quizLink.href = '/quiz.html';
     }
   }
 
@@ -104,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     quizGenerationModal.classList.remove('hidden');
     generationMessage.textContent = `Generating questions for ${pageSelect.value}, please wait...`;
     try {
-      const response = await fetch('/api/generate-quiz', {
+      const response = await fetch(`${API_BASE}/api/generate-quiz`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -117,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await response.json();
       if (result.status === 'success') {
         generationMessage.textContent = `Generated ${result.questions_count} questions in ${result.generation_time}s!`;
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Brief pause to show success
+        await new Promise(resolve => setTimeout(resolve, 1000));
         return result;
       } else {
         throw new Error(result.detail || 'Failed to generate quiz');
@@ -154,7 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const result = await generateQuiz();
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message ai';
-        messageDiv.innerHTML = marked.parse(`Quiz generated for **${pageSelect.value}**! [Take the quiz](/quiz?page_title=${encodeURIComponent(pageSelect.value)})`);
+        messageDiv.innerHTML = marked.parse(
+          `Quiz generated for **${pageSelect.value}**! [Take the quiz](/quiz.html?page_title=${encodeURIComponent(pageSelect.value)})`
+        );
         chatArea.appendChild(messageDiv);
         chatArea.scrollTop = chatArea.scrollHeight;
       } catch (error) {
@@ -162,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else {
       try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch(`${API_BASE}/api/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question, session_id: 'user1', page_title: pageSelect.value })
@@ -171,12 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (result.status === 'success') {
           const messageDiv = document.createElement('div');
           messageDiv.className = 'message ai';
-          // Parse the response as Markdown using marked.js
           try {
             messageDiv.innerHTML = marked.parse(result.answer);
           } catch (e) {
             console.error('Markdown parsing error:', e);
-            // Fallback: display plain text if Markdown parsing fails
             messageDiv.textContent = result.answer;
           }
           chatArea.appendChild(messageDiv);
@@ -200,6 +199,5 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') sendQuestion();
   });
 
-  // Load pages on page load
   loadPages();
 });

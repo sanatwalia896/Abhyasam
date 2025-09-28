@@ -1,0 +1,302 @@
+[
+  {
+    "question": "What is the primary purpose of an IIFE (Immediately Invoked Function Expression) in JavaScript?",
+    "options": [
+      "To create a named function that can be called later",
+      "To create a private scope and avoid polluting the global namespace",
+      "To improve the performance of loops",
+      "To automatically convert values to Boolean"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "In the higher\u2011order function `operateOnNumbers(a, b, operationFn)`, what type of argument is `operationFn`?",
+    "options": [
+      "A number",
+      "A string",
+      "A function",
+      "An object"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which loop is best suited for iterating over the elements of an array in ES6?",
+    "options": [
+      "for (let i = 0; i < array.length; i++)",
+      "for (let key in array)",
+      "for (let item of array)",
+      "while (array.hasNext())"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What will the following code output?\n```js\nlet person = { name: \"John\", age: 30 };\nfor (let key in person) {\n  console.log(key);\n}\n```",
+    "options": [
+      "\"John\" \"30\"",
+      "\"name\" \"age\"",
+      "\"person\"",
+      "Nothing, because `for...in` cannot be used on objects"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following expressions evaluates to `false`?",
+    "options": [
+      "Boolean(0)",
+      "Boolean(\"hello\")",
+      "Boolean([])",
+      "Boolean(42)"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Given the code `user = \"Jane\";`, which statement is true?",
+    "options": [
+      "The variable `user` is being redeclared with `let`",
+      "The variable `user` is being reassigned, which is allowed",
+      "The code will throw a syntax error because `user` was never declared",
+      "The variable `user` becomes a constant"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Why does the following line cause an error?\n```js\nlet user = \"New user\"; // after `user = \"Jane\";`\n```",
+    "options": [
+      "Because `let` variables cannot be assigned a value",
+      "Because you cannot redeclare a variable with `let` in the same scope",
+      "Because `user` is a reserved keyword",
+      "Because `let` can only be used inside functions"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which statement about `const` declarations is correct?",
+    "options": [
+      "`const` variables can be reassigned but not redeclared",
+      "`const` creates a block\u2011scoped variable whose value cannot be reassigned",
+      "`const` works only for primitive values, not objects",
+      "`const` variables are automatically global"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following is NOT a typical use case for JavaScript according to the overview?",
+    "options": [
+      "Front\u2011end web development",
+      "Back\u2011end server development",
+      "Operating system kernel development",
+      "IoT (Internet of Things) applications"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "In the FizzBuzz program, what will be printed for the number 15?",
+    "options": [
+      "15",
+      "Fizz",
+      "Buzz",
+      "FizzBuzz"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "What is the primary purpose of using an IIFE (Immediately Invoked Function Expression) in JavaScript?",
+    "options": [
+      "To create a named function that can be called later",
+      "To generate private scopes and avoid polluting the global namespace",
+      "To improve the performance of loops",
+      "To automatically convert values to booleans"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "In the higher\u2011order function example, what will be logged by the following code?\n```js\nfunction operateOnNumbers(a, b, operationFn) {\n    return operationFn(a, b);\n}\nconst add = (x, y) => x + y;\nconsole.log(operateOnNumbers(5, 3, add));\n```",
+    "options": [
+      "5",
+      "3",
+      "8",
+      "15"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which loop is best suited for iterating over the elements of an array without needing the index?",
+    "options": [
+      "Traditional for loop (for (let i = 0; i < arr.length; i++))",
+      "for...in loop",
+      "for...of loop",
+      "while loop"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Given the object `let person = { name: \"John\", age: 30, job: \"Developer\" };`, what will the following code output?\n```js\nfor (let key in person) {\n    console.log(`${key}: ${person[key]}`);\n}\n```",
+    "options": [
+      "John, 30, Developer",
+      "name, age, job",
+      "name: John\\nage: 30\\njob: Developer",
+      "It will throw a syntax error"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What is the result of `Boolean(\"\")` in JavaScript?",
+    "options": [
+      "true",
+      "false",
+      "null",
+      "undefined"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following statements about the `let` keyword is true?",
+    "options": [
+      "Variables declared with `let` can be redeclared in the same scope",
+      "Variables declared with `let` cannot be reassigned",
+      "Variables declared with `let` are block\u2011scoped and can be reassigned",
+      "`let` creates global variables automatically"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Why does the line `const PI = 3.14159; PI = 3.14;` cause an error?",
+    "options": [
+      "Because `PI` was declared with `let` instead of `const`",
+      "Because constants cannot be reassigned after initialization",
+      "Because numbers cannot be changed in JavaScript",
+      "Because the value 3.14 is not a valid number"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following is NOT a typical use case for JavaScript mentioned in the material?",
+    "options": [
+      "Front\u2011end web development",
+      "Back\u2011end server development",
+      "Operating system kernel development",
+      "IoT (Internet of Things) applications"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "In the FizzBuzz program, what will be printed for the number 15?",
+    "options": [
+      "15",
+      "Fizz",
+      "Buzz",
+      "FizzBuzz"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "What is the output of the following code snippet?\n```js\nlet fruits = [\"Apple\", \"Banana\", \"Cherry\"];\nfor (let i = 0; i < fruits.length; i++) {\n    console.log(`Fruit ${i+1}: ${fruits[i]}`);\n}\n```",
+    "options": [
+      "Apple\\nBanana\\nCherry",
+      "Fruit 0: Apple\\nFruit 1: Banana\\nFruit 2: Cherry",
+      "Fruit 1: Apple\\nFruit 2: Banana\\nFruit 3: Cherry",
+      "It will cause a runtime error"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What is the primary purpose of an IIFE (Immediately Invoked Function Expression) in JavaScript?",
+    "options": [
+      "To create a function that can be called multiple times later",
+      "To define a class with private methods",
+      "To create a private scope and avoid polluting the global namespace",
+      "To enable asynchronous execution of code"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "In the higher\u2011order function example, what will be logged by the following call?\n\noperateOnNumbers(5, 3, multiply);",
+    "options": [
+      "5",
+      "8",
+      "15",
+      "Error because multiply is not defined"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which loop is best suited for iterating over the values of an array in ES6?",
+    "options": [
+      "for (let i = 0; i < array.length; i++)",
+      "for...in loop",
+      "while loop",
+      "for...of loop"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "Given the object:\n\nlet person = { name: \"John\", age: 30, job: \"Developer\" };\n\nWhat will be the output of the following code?\n\nfor (let key in person) { console.log(key); }",
+    "options": [
+      "\"John\", \"30\", \"Developer\"",
+      "\"name\", \"age\", \"job\"",
+      "\"person\"",
+      "Undefined"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "What is the result of Boolean(\"\") in JavaScript?",
+    "options": [
+      "true",
+      "false",
+      "null",
+      "NaN"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following statements about the `let` keyword is true?",
+    "options": [
+      "A variable declared with let can be redeclared in the same scope",
+      "A variable declared with let cannot be reassigned",
+      "A variable declared with let can be reassigned but not redeclared in the same scope",
+      "let creates a global variable automatically"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What will happen if you try to reassign a constant declared with `const`?",
+    "options": [
+      "The value will be updated silently",
+      "JavaScript will create a new variable with the same name",
+      "A runtime TypeError will be thrown",
+      "The code will compile but produce undefined behavior"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which of the following is NOT a typical use case for JavaScript?",
+    "options": [
+      "Front\u2011end web development",
+      "Back\u2011end server development with Node.js",
+      "Database schema design",
+      "IoT (Internet of Things) applications"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "In the FizzBuzz program, what will be printed for the number 15?",
+    "options": [
+      "15",
+      "Fizz",
+      "Buzz",
+      "FizzBuzz"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "Which loop would you use to iterate over an object's own enumerable properties?",
+    "options": [
+      "for...of loop",
+      "for...in loop",
+      "do...while loop",
+      "forEach method"
+    ],
+    "answer": 1
+  }
+]

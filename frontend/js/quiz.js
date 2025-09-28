@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const API_BASE = 'http://127.0.0.1:8000';
   const pageSelect = document.getElementById('page-select');
   const numQuestionsInput = document.getElementById('num-questions');
   const startQuizBtn = document.getElementById('start-quiz-btn');
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadPages() {
     loading.classList.remove('hidden');
     try {
-      const response = await fetch('/api/notion-pages');
+      const response = await fetch(`${API_BASE}/api/notion-pages`);
       const data = await response.json();
       if (data.status === 'success') {
         pageSelect.innerHTML = '<option value="">Select a Notion page (optional)</option>';
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loading.classList.remove('hidden');
     try {
-      const response = await fetch('/api/start-quiz', {
+      const response = await fetch(`${API_BASE}/api/start-quiz`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -98,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addMessage('user', answer);
     loading.classList.remove('hidden');
     try {
-      const response = await fetch('/api/submit-quiz-answer', {
+      const response = await fetch(`${API_BASE}/api/submit-quiz-answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

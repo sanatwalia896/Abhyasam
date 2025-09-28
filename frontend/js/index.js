@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const API_BASE = 'http://127.0.0.1:8000';
   const pageSelect = document.getElementById('page-select');
   const refreshBtn = document.getElementById('refresh-btn');
   const quizBtn = document.getElementById('quiz-btn');
@@ -17,11 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     interactivity: { detect_on: 'canvas', events: { onhover: { enable: false } } }
   });
-
+  
   async function loadPages() {
     loading.classList.remove('hidden');
     try {
-      const response = await fetch('/api/notion-pages');
+      const response = await fetch(`${API_BASE}/api/notion-pages`);
       const data = await response.json();
       if (data.status === 'success') {
         pageSelect.innerHTML = '<option value="">Select a Notion page</option>';
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function refreshPages() {
     loading.classList.remove('hidden');
     try {
-      const response = await fetch('/api/refresh-notion', {
+      const response = await fetch(`${API_BASE}/api/refresh-notion`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ force: true })
@@ -76,14 +77,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!pageSelect.value) return;
     loading.classList.remove('hidden');
     try {
-      const response = await fetch('/api/generate-quiz', {
+      const response = await fetch(`${API_BASE}/api/generate-quiz`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ page_title: pageSelect.value })
       });
       const result = await response.json();
       if (result.status === 'success') {
-        window.location.href = `/quiz?page_title=${encodeURIComponent(pageSelect.value)}`;
+        window.location.href = `/quiz.html?page_title=${encodeURIComponent(pageSelect.value)}`;
       } else {
         alert('Error generating quiz');
       }
@@ -97,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startChat() {
     if (!pageSelect.value) return;
-    window.location.href = `/chat?page_title=${encodeURIComponent(pageSelect.value)}`;
+    window.location.href = `/chat.html?page_title=${encodeURIComponent(pageSelect.value)}`;
   }
 
   pageSelect.addEventListener('change', toggleButtons);

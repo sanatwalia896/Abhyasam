@@ -167,9 +167,9 @@ class AbhyasamChat:
                 else:
                     logger.warning(f"Invalid question format: {q}")
 
-            with open("static/questions.json", "w") as f:
+            with open("data/questions.json", "w") as f:
                 json.dump(formatted_questions, f, indent=2)
-            logger.info(f"Dumped {len(formatted_questions)} questions to static/questions.json")
+            logger.info(f"Dumped {len(formatted_questions)} questions to data/questions.json")
 
             return formatted_questions
         except Exception as e:
