@@ -98,13 +98,16 @@ For production: Deploy static files (`/static`, HTML) to Vercel/GitHub Pages; ba
 ```
 project_root/
 ├── static/                  # Static assets served by FastAPI
-│   ├── css/                 # Stylesheets
+│   ├── css/  
+│   │   ├── index.css                 # Stylesheets
 │   │   ├── quiz.css         # Quiz-specific styles
 │   │   ├── chat.css         # Chat-specific styles
-│   ├── js/                  # JavaScript files
+│   ├── js/ 
+│   │   ├── index.js                  # JavaScript files
 │   │   ├── quiz.js          # Quiz-specific scripts
 │   │   ├── chat.js          # Chat-specific scripts
-│   ├── questions.json       # Generated MCQ quizzes
+│   ├── questions.json 
+│   ├── index.html         # Generated MCQ quizzes
 │   ├── quiz.html            # Quiz interface HTML
 │   ├── chat.html            # Chat interface HTML
 ├── main.py                  # FastAPI app (routes, endpoints)

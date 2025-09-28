@@ -1,302 +1,302 @@
 [
   {
-    "question": "What does the Integration feature of LangChain provide?",
+    "question": "What is the primary purpose of an IIFE (Immediately Invoked Function Expression) in JavaScript?",
     "options": [
-      "Pre-built integrations with various LLM providers, data sources, and tools",
-      "Automatic model training on user data",
-      "Real-time sentiment analysis of responses",
-      "Built-in visualizations for model performance"
-    ],
-    "answer": 0
-  },
-  {
-    "question": "Which of the following is an example of use\u2011case optimization offered by LangChain?",
-    "options": [
-      "Generating random numbers for simulations",
-      "Optimized chains for question answering, summarization, and chat",
-      "Compiling source code into executable binaries",
-      "Encrypting data using asymmetric keys"
-    ],
-    "answer": 1
-  },
-  {
-    "question": "In LangChain, what is the purpose of the \"Language Models\" component?",
-    "options": [
-      "To store conversation history in memory",
-      "To provide wrappers around LLMs from providers like OpenAI, Anthropic, Cohere, etc.",
-      "To define custom UI widgets for user interaction",
-      "To manage file system operations for data ingestion"
-    ],
-    "answer": 1
-  },
-  {
-    "question": "What role do \"Prompts\" play in LangChain?",
-    "options": [
-      "They act as templates and tools for creating and managing prompts",
-      "They handle authentication with external APIs",
-      "They compress large documents into embeddings",
-      "They schedule periodic model retraining"
-    ],
-    "answer": 0
-  },
-  {
-    "question": "In the provided decision function `should_refine`, what value is returned when `state[\"needs_refinement\"]` is true?",
-    "options": [
-      "\"end\"",
-      "\"continue\"",
-      "\"refine\"",
-      "\"stop\""
+      "To create a function that can be called later multiple times",
+      "To define a class constructor",
+      "To create a private scope and avoid polluting the global namespace",
+      "To enable asynchronous execution of code"
     ],
     "answer": 2
   },
   {
-    "question": "Which field is NOT part of the `CalculatorInput` model for the custom calculator tool?",
+    "question": "In the higher\u2011order function example, what will be logged by `operateOnNumbers(5, 3, multiply)`?",
     "options": [
-      "operation",
-      "a",
-      "b",
-      "result"
+      "5",
+      "8",
+      "15",
+      "53"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which loop is best suited for iterating over the values of an array without needing the index?",
+    "options": [
+      "Traditional `for` loop",
+      "`for...in` loop",
+      "`while` loop",
+      "`for...of` loop"
     ],
     "answer": 3
   },
   {
-    "question": "What is the description of the `CalculatorTool` class?",
+    "question": "What does the `for...in` loop iterate over?",
     "options": [
-      "A tool for retrieving documents from a vector store",
-      "Useful for performing mathematical calculations",
-      "A memory system that stores chat history",
-      "A wrapper for sending HTTP requests"
-    ],
-    "answer": 1
-  },
-  {
-    "question": "What type of memory is created with `ConversationBufferMemory` in the example?",
-    "options": [
-      "Long\u2011term knowledge graph memory",
-      "ConversationBufferMemory that returns messages",
-      "Vector store memory for document embeddings",
-      "Cache memory for model weights"
-    ],
-    "answer": 1
-  },
-  {
-    "question": "The `ConversationalRetrievalChain.from_llm` call combines which three components?",
-    "options": [
-      "LLM, retriever, and memory",
-      "LLM, optimizer, and tokenizer",
-      "Retriever, transformer, and scheduler",
-      "Memory, logger, and debugger"
-    ],
-    "answer": 0
-  },
-  {
-    "question": "When the conversational QA chain is invoked with the question \"What is the main topic of this document?\", where does the answer come from?",
-    "options": [
-      "The hard\u2011coded response in the code",
-      "The LLM combined with retrieved documents and conversation memory",
-      "A random generator seeded by the system clock",
-      "The `CalculatorTool` performing a calculation"
-    ],
-    "answer": 1
-  },
-  {
-    "question": "Which of the following is NOT listed as a key component of LangChain?",
-    "options": [
-      "Language Models",
-      "Prompts",
-      "Data Visualization",
-      "Tools"
+      "Elements of an iterable object like an array",
+      "Numeric indices of an array",
+      "Properties (keys) of an object",
+      "Values returned by a generator function"
     ],
     "answer": 2
   },
   {
-    "question": "What does the \"Integration\" feature of LangChain provide?",
+    "question": "What is the result of `Boolean(\"hello\")` in JavaScript?",
     "options": [
-      "Custom neural network training",
-      "Pre\u2011built integrations with LLM providers, data sources, and tools",
-      "Automatic code generation for mobile apps",
-      "Real\u2011time video streaming"
+      "false",
+      "true",
+      "null",
+      "NaN"
     ],
     "answer": 1
   },
   {
-    "question": "Which use\u2011case is explicitly mentioned as having an optimized chain in LangChain?",
+    "question": "Given `let user = \"Jane\";`, which of the following statements will cause an error in the same scope?",
     "options": [
-      "Image classification",
-      "Question answering",
-      "Speech synthesis",
-      "Time\u2011series forecasting"
+      "user = \"John\";",
+      "let user = \"John\";",
+      "user = user.toUpperCase();",
+      "console.log(user);"
     ],
     "answer": 1
   },
   {
-    "question": "In the provided code, what type of object does the variable `document` contain?",
+    "question": "Why can't the value of a `const` variable be changed after its declaration?",
     "options": [
-      "A string with plain text",
-      "A dictionary with metadata",
-      "An instance of `Document` with a `page_content` attribute",
-      "A pandas DataFrame"
+      "Because `const` variables are automatically frozen objects",
+      "Because `const` creates a block\u2011scoped read\u2011only binding",
+      "Because `const` is only allowed for primitive values",
+      "Because JavaScript treats `const` as a function"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following is NOT listed as a common use case for JavaScript in the overview?",
+    "options": [
+      "Front\u2011end web development",
+      "Back\u2011end server development",
+      "Database schema design",
+      "IoT (Internet of Things) applications"
     ],
     "answer": 2
   },
   {
-    "question": "The function `should_refine` returns \"refine\" when:",
+    "question": "In the FizzBuzz program, what will be printed for the number 15?",
     "options": [
-      "state[\"needs_refinement\"] is True",
-      "state[\"needs_refinement\"] is False",
-      "the input is a string containing the word \"refine\"",
-      "the function always returns \"end\""
-    ],
-    "answer": 0
-  },
-  {
-    "question": "Which of the following fields is NOT part of the `CalculatorInput` schema?",
-    "options": [
-      "operation",
-      "a",
-      "b",
-      "result"
+      "15",
+      "Fizz",
+      "Buzz",
+      "FizzBuzz"
     ],
     "answer": 3
   },
   {
-    "question": "What is the purpose of the `ConversationBufferMemory` in the example?",
+    "question": "What will the following code output?\n```javascript\nlet fruits = [\"Apple\", \"Banana\", \"Cherry\"];\nfor (let i = 0; i < fruits.length; i++) {\n  console.log(`Fruit ${i+1}: ${fruits[i]}`);\n}\n```",
     "options": [
-      "To store the LLM weights",
-      "To keep a history of the conversation for the chain",
-      "To cache API responses from external services",
-      "To manage file system paths"
-    ],
-    "answer": 1
-  },
-  {
-    "question": "Which class is used to create a conversational QA chain in the snippet?",
-    "options": [
-      "ConversationalRetrievalChain",
-      "RetrievalAugmentedGenerationChain",
-      "LLMChain",
-      "PromptTemplate"
-    ],
-    "answer": 0
-  },
-  {
-    "question": "In the fake database example, what will be returned if the query contains the word \"warranty\"?",
-    "options": [
-      "\"The product dimensions are 10x15x5 inches and it weighs 3.5 pounds\"",
-      "\"The product comes with a 2-year limited warranty\"",
-      "\"No relevant information found in the database.\"",
-      "\"The product is out of stock\""
-    ],
-    "answer": 1
-  },
-  {
-    "question": "Which LLM providers are explicitly mentioned as being wrapped by LangChain's Language Model component?",
-    "options": [
-      "Google, Microsoft, Amazon",
-      "OpenAI, Anthropic, Cohere",
-      "IBM Watson, Baidu, Tencent",
-      "Meta, DeepMind, OpenAI"
-    ],
-    "answer": 1
-  },
-  {
-    "question": "Which of the following best describes the purpose of LangChain's integration feature?",
-    "options": [
-      "To provide pre-built integrations with various LLM providers, data sources, and tools",
-      "To create custom neural network architectures",
-      "To perform low-level hardware optimization",
-      "To generate synthetic training data"
-    ],
-    "answer": 0
-  },
-  {
-    "question": "What is meant by \"use\u2011case optimization\" in LangChain?",
-    "options": [
-      "Automatically tuning hyper\u2011parameters of LLMs",
-      "Providing optimized chains for common tasks such as question answering, summarization, and chat",
-      "Compressing model weights for faster inference",
-      "Translating prompts into multiple languages"
-    ],
-    "answer": 1
-  },
-  {
-    "question": "Which component of LangChain is responsible for wrapping LLMs from providers such as OpenAI, Anthropic, and Cohere?",
-    "options": [
-      "Prompts",
-      "Memory",
-      "Language Models",
-      "Tools"
+      "Apple\nBanana\nCherry",
+      "Fruit 0: Apple\nFruit 1: Banana\nFruit 2: Cherry",
+      "Fruit 1: Apple\nFruit 2: Banana\nFruit 3: Cherry",
+      "Fruit 1: Apple\nFruit 2: Banana\nFruit 3: Cherry\nFruit 4: undefined"
     ],
     "answer": 2
   },
   {
-    "question": "In the provided code, what does the function `should_refine` return when `state[\"needs_refinement\"]` is false?",
+    "question": "What does IIFE stand for and what is its primary purpose in JavaScript?",
     "options": [
-      "\"refine\"",
-      "\"end\"",
-      "\"continue\"",
-      "\"stop\""
-    ],
-    "answer": 1
-  },
-  {
-    "question": "Which field in the `CalculatorInput` model describes the type of mathematical operation to perform?",
-    "options": [
-      "operation",
-      "a",
-      "b",
-      "description"
+      "Immediately Invoked Function Expression; to create a private scope and avoid polluting the global namespace",
+      "Iterative Inline Function Execution; to speed up loops",
+      "Internal Interface Function Export; to expose modules globally",
+      "Instantaneous Inline Function Example; to demonstrate arrow syntax"
     ],
     "answer": 0
   },
   {
-    "question": "What is the purpose of the `ConversationBufferMemory` component in the example?",
+    "question": "Given the higher\u2011order function `operateOnNumbers(a, b, operationFn)`, what is the result of `operateOnNumbers(5, 3, add)` where `add = (x, y) => x + y`?",
     "options": [
-      "To store the LLM weights",
-      "To keep a history of the conversation for context",
-      "To retrieve documents from a vector store",
-      "To execute mathematical calculations"
+      "3",
+      "5",
+      "8",
+      "15"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which loop syntax is the most concise way to iterate over the values of an array in ES6?",
+    "options": [
+      "for (let i = 0; i < arr.length; i++)",
+      "for (let index in arr)",
+      "for (let value of arr)",
+      "while (arr.length)"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which loop is specifically designed to iterate over the enumerable properties (keys) of an object?",
+    "options": [
+      "for...of",
+      "for...in",
+      "forEach",
+      "while"
     ],
     "answer": 1
   },
   {
-    "question": "When querying the fake database, which of the following statements is true?",
+    "question": "What is the Boolean conversion result of `Boolean(\"\")`?",
     "options": [
-      "The query must match the keyword case\u2011sensitively",
-      "The function returns the first matching keyword's information regardless of order",
-      "If no keyword matches, the function raises an exception",
-      "The function always returns the entire database as a JSON string"
+      "true",
+      "false",
+      "null",
+      "undefined"
     ],
     "answer": 1
   },
   {
-    "question": "Which LangChain class is used to create a chain that can answer questions based on retrieved documents while remembering the chat history?",
+    "question": "Which statement about the `let` keyword is true?",
     "options": [
-      "LLMChain",
-      "ConversationalRetrievalChain",
-      "SimpleSequentialChain",
-      "PromptTemplate"
+      "A variable declared with `let` can be redeclared in the same scope",
+      "A variable declared with `let` cannot be reassigned",
+      "A variable declared with `let` can be reassigned but not redeclared in the same scope",
+      "`let` creates a global variable regardless of where it is declared"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which of the following actions will cause an error when using `const`?",
+    "options": [
+      "Reading the value of a const variable",
+      "Reassigning the const variable to a new value",
+      "Using the const variable inside a function",
+      "Declaring a const variable without initializing it"
     ],
     "answer": 1
   },
   {
-    "question": "In the example document list, what is the `page_content` of the second document?",
+    "question": "Which of the following is NOT a common area where JavaScript is used?",
     "options": [
-      "\"Tokyo is the capital of Japan and the most populous metropolitan area in the world.\"",
-      "\"Beijing is the capital of China and contains the Forbidden City.\"",
-      "\"The product dimensions are 10x15x5 inches and it weighs 3.5 pounds\"",
-      "\"The product comes with a 2-year limited warranty\""
+      "Front\u2011end web development",
+      "Back\u2011end server development with Node.js",
+      "Mobile app development",
+      "Low\u2011level operating system kernel development"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "In the classic FizzBuzz program, what will be printed for the number 15?",
+    "options": [
+      "15",
+      "Fizz",
+      "Buzz",
+      "FizzBuzz"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "In the higher\u2011order function example, how is the `multiply` function defined?",
+    "options": [
+      "As a traditional function declaration that returns the sum of two numbers",
+      "As an arrow function that returns the product of two numbers",
+      "As a method inside an object that multiplies three numbers",
+      "As a callback that logs the multiplication result to the console"
     ],
     "answer": 1
   },
   {
-    "question": "Which of the following best describes a \"tool\" in LangChain, as illustrated by the `CalculatorTool` class?",
+    "question": "What is the primary purpose of an IIFE (Immediately Invoked Function Expression) in JavaScript?",
     "options": [
-      "A pre\u2011trained LLM model",
-      "A reusable component that performs a specific external function, such as calculations",
-      "A memory buffer for storing conversation history",
-      "A prompt template for generating text"
+      "To create a private scope and avoid polluting the global namespace",
+      "To improve the performance of loops",
+      "To enable asynchronous code execution",
+      "To define a class without using the class keyword"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Given the higher\u2011order function `operateOnNumbers`, what is the result of `operateOnNumbers(5, 3, multiply)`?",
+    "options": [
+      "5",
+      "8",
+      "15",
+      "3"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which loop syntax is the most appropriate for iterating directly over the values of an array?",
+    "options": [
+      "for...in",
+      "while",
+      "for...of",
+      "do...while"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "What does `console.log(Boolean(\"\"))` output?",
+    "options": [
+      "true",
+      "false",
+      "undefined",
+      "null"
     ],
     "answer": 1
+  },
+  {
+    "question": "Which statement about `let` and `const` is true?",
+    "options": [
+      "`const` variables can be redeclared in the same scope",
+      "`let` variables cannot be reassigned after initialization",
+      "`const` values cannot be reassigned after they are initialized",
+      "`let` always creates a global variable"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "When using a `for...in` loop on the object `person`, which of the following is logged first?",
+    "options": [
+      "name: John",
+      "age: 30",
+      "job: Developer",
+      "The order is not guaranteed"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "In the classic FizzBuzz program, which condition should be evaluated first to correctly print \"FizzBuzz\" for numbers divisible by both 3 and 5?",
+    "options": [
+      "i % 3 === 0",
+      "i % 5 === 0",
+      "i % 3 === 0 && i % 5 === 0",
+      "i % 15 === 0"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Which of the following is NOT a typical use case for JavaScript?",
+    "options": [
+      "Front\u2011end web development",
+      "Back\u2011end server development with Node.js",
+      "Mobile app development",
+      "Operating\u2011system kernel development"
+    ],
+    "answer": 3
+  },
+  {
+    "question": "What will be printed by `console.log(operateOnNumbers(5, 3, add));`?",
+    "options": [
+      "5",
+      "8",
+      "15",
+      "NaN"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which statement about variable redeclaration in the same scope is correct?",
+    "options": [
+      "`let` can be redeclared in the same scope",
+      "`const` can be redeclared in the same scope",
+      "`let` cannot be redeclared in the same scope",
+      "`var` cannot be redeclared in the same scope"
+    ],
+    "answer": 2
   }
 ]
