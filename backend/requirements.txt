@@ -1,10 +1,22 @@
 fastapi
 uvicorn
-langchain>=0.3
+
+
+langchain
+langchain-huggingface
 langchain-groq
 langchain-pinecone
-langchain-huggingface
-langchain-core  # For Document and splitters
+
+
 pinecone-client
+pinecone
+langchain_community
+
+
+huggingface-hub
+
+torch
+tiktoken
+
 python-dotenv
-pydantic
+orjson
