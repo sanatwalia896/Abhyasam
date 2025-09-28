@@ -1,7 +1,5 @@
 # Abhyasam
-
-
-![Abhyasam Logo](https://via.placeholder.com/150?text=RevisionAI) <!-- Replace with actual logo if available -->
+<!-- Replace with actual logo if available -->
 
 A professional web application for revising Notion notes through interactive quizzes and Q&A sessions. Built with modern technologies to demonstrate full-stack engineering skills, including backend APIs, vector databases, and responsive frontend design.
 
@@ -96,27 +94,41 @@ For production: Deploy static files (`/static`, HTML) to Vercel/GitHub Pages; ba
 ## Directory Structure
 
 ```
-project_root/
-├── static/                  # Static assets served by FastAPI
-│   ├── css/  
-│   │   ├── index.css                 # Stylesheets
-│   │   ├── quiz.css         # Quiz-specific styles
-│   │   ├── chat.css         # Chat-specific styles
-│   ├── js/ 
-│   │   ├── index.js                  # JavaScript files
-│   │   ├── quiz.js          # Quiz-specific scripts
-│   │   ├── chat.js          # Chat-specific scripts
-│   ├── questions.json 
-│   ├── index.html         # Generated MCQ quizzes
-│   ├── quiz.html            # Quiz interface HTML
-│   ├── chat.html            # Chat interface HTML
-├── main.py                  # FastAPI app (routes, endpoints)
-├── chatbot.py               # Core logic (chat, quiz generation, evaluation)
-├── notion_loader.py         # Notion API integration for loading pages
-├── populate_vectors.py      # Vector store population (full upsert)
-├── populate_vectorstore_with_new_pages.py  # Incremental updates to Pinecone
-├── .env                     # Environment variables (gitignored)
-├── README.md                # This file
+    ├── code_testing/
+    │   ├── test_notion_loader.py
+    │   ├── test_pinecone_vector_store.py
+    │   └── testing_pinecone.py
+    ├── frontend/
+    │   ├── index.html
+    │   ├── .DS_Store
+    │   ├── css/
+    │   │   ├── index.css
+    │   │   ├── chat.css
+    │   │   └── quiz.css
+    │   ├── js/
+    │   │   ├── quiz.js
+    │   │   ├── index.js
+    │   │   └── chat.js
+    │   ├── questions.json
+    │   ├── quiz.html
+    │   ├── page_id_with_titles.json
+    │   └── chat.html
+    ├── LICENSE
+    ├── vercel.json
+    ├── backend/
+    │   ├── requirements.txt
+    │   ├── __init__.py
+    │   ├── __pycache__/
+    │   ├── .env
+    │   ├── populate_vectors.py
+    │   ├── notion_loader.py
+    │   ├── chatbot.py
+    │   ├── main.py
+    │   ├── data/
+    │   │   └── page_id_with_titles.json
+    │   └── populate_vectorstore_with_new_pages.py
+    ├── README.md
+    └── page_id_with_title.json
 ```
 
 ## Contributing
