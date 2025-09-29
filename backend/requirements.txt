@@ -1,28 +1,20 @@
+# Core web framework
 fastapi
-uvicorn
+uvicorn[standard]
 
-
-langchain
-langchain-huggingface
-langchain-groq
-langchain-pinecone
-
-
-pinecone-client
-pinecone
-langchain_community
-
-
-
-
-python-dotenvfastapi
-uvicorn
+# Environment variables
 python-dotenv
+
+# LangChain ecosystem
 langchain
+langchain-community
+langchain-huggingface
 langchain-groq
 langchain-pinecone
-langchain-huggingface
+
+# Pinecone
 pinecone-client
+
+# Utilities
 pydantic
 requests
-
