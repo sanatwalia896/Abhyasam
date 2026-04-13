@@ -5,9 +5,10 @@ A professional web application for revising Notion notes through interactive qui
 
 ## Overview
 
-RevisionAI syncs your Notion pages, vectorizes their content for semantic search, and provides two core modes:
+RevisionAI syncs your Notion pages, vectorizes their content for semantic search, and provides three core modes:
 - **Quiz Mode**: Generate open-ended or MCQ quizzes to test knowledge.
 - **Chat Mode**: Ask questions about your notes for on-demand revision.
+- **Flashcards Mode**: Auto-generate concept/definition flashcards for rapid interactive learning.
 
 The app is designed for desktop and mobile responsiveness, using FastAPI for the backend, Pinecone for vector storage, Groq for LLM inference via LangChain, and vanilla HTML/CSS/JS for the frontend. It's deployable on Vercel or GitHub Pages for the static assets, with the backend on a server like Render or Fly.io.
 
@@ -23,6 +24,7 @@ This project showcases skills in:
 - **Page Filtering**: Select specific Notion pages for targeted quizzes or chats.
 - **Interactive Quiz**: Open-ended questions with AI evaluation (score + feedback).
 - **MCQ Generation**: Batch-generate multiple-choice quizzes (stored as JSON).
+- **Flashcards Generation**: Convert topics into interactive 3D flashcards.
 - **Q&A Chat**: Conversational interface for asking questions with context-aware responses.
 - **Responsive Design**: Mobile-friendly layout with particles.js animations.
 - **Stateful Sessions**: Maintain chat history and quiz states.
@@ -83,11 +85,16 @@ This project showcases skills in:
    - Answer open-ended prompts; get AI-scored feedback.
 4. **Chat Mode**:
    - Ask questions filtered by page; responses use RAG from Pinecone.
-5. **API Endpoints** (for extension):
+5. **Flashcards Mode**:
+   - Auto-generate flashcards based on a topic or selected Notion page.
+   - Review concept/definition pairs interactively on rotatable 3D cards.
+6. **API Endpoints** (for extension):
    - `/api/refresh-notion`: Sync Notion pages.
    - `/api/start-quiz`: Start interactive quiz.
    - `/api/submit-quiz-answer`: Submit answers for evaluation.
    - `/api/chat`: Handle Q&A queries.
+   - `/api/generate-flashcards`: Generate new flashcards for a specific topic.
+   - `/api/flashcards`: Retrieve the currently generated flashcards.
 
 For production: Deploy static files (`/static`, HTML) to Vercel/GitHub Pages; backend to a server. Use NGINX/Apache for reverse proxy if needed.
 
@@ -104,13 +111,16 @@ For production: Deploy static files (`/static`, HTML) to Vercel/GitHub Pages; ba
     │   ├── css/
     │   │   ├── index.css
     │   │   ├── chat.css
-    │   │   └── quiz.css
+    │   │   ├── quiz.css
+    │   │   └── flashcard.css
     │   ├── js/
     │   │   ├── quiz.js
     │   │   ├── index.js
-    │   │   └── chat.js
+    │   │   ├── chat.js
+    │   │   └── flashcards.js
     │   ├── questions.json
     │   ├── quiz.html
+    │   ├── flashcards.html
     │   ├── page_id_with_titles.json
     │   └── chat.html
     ├── LICENSE

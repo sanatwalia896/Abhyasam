@@ -1,301 +1,301 @@
 [
   {
-    "question": "What is the primary purpose of an IIFE (Immediately Invoked Function Expression) in JavaScript?",
+    "question": "Which of the following is NOT a primary responsibility of an autonomous agent in AI systems?",
     "options": [
-      "To create a named function that can be called later",
-      "To create a private scope and avoid polluting the global namespace",
-      "To improve the performance of loops",
-      "To automatically convert values to Boolean"
-    ],
-    "answer": 1
-  },
-  {
-    "question": "In the higher\u2011order function `operateOnNumbers(a, b, operationFn)`, what type of argument is `operationFn`?",
-    "options": [
-      "A number",
-      "A string",
-      "A function",
-      "An object"
+      "Maintaining task state and progress",
+      "Coordinating between planning and execution phases",
+      "Tracking authorship and contributions",
+      "Managing feedback from tool usage"
     ],
     "answer": 2
   },
   {
-    "question": "Which loop is best suited for iterating over the elements of an array in ES6?",
+    "question": "In collaborative AI systems, preserving shared context primarily helps to:",
     "options": [
-      "for (let i = 0; i < array.length; i++)",
-      "for (let key in array)",
-      "for (let item of array)",
-      "while (array.hasNext())"
-    ],
-    "answer": 2
-  },
-  {
-    "question": "What will the following code output?\n```js\nlet person = { name: \"John\", age: 30 };\nfor (let key in person) {\n  console.log(key);\n}\n```",
-    "options": [
-      "\"John\" \"30\"",
-      "\"name\" \"age\"",
-      "\"person\"",
-      "Nothing, because `for...in` cannot be used on objects"
+      "Reduce the number of model calls needed for a task",
+      "Ensure consistent understanding among multiple users and models",
+      "Increase the size of the model's parameter count",
+      "Eliminate the need for long\u2011running processes"
     ],
     "answer": 1
   },
   {
-    "question": "Which of the following expressions evaluates to `false`?",
+    "question": "What is the main purpose of breaking a complex task into multiple model calls in long\u2011running processes?",
     "options": [
-      "Boolean(0)",
-      "Boolean(\"hello\")",
-      "Boolean([])",
-      "Boolean(42)"
+      "To avoid using any external tools",
+      "To preserve state across extended operations",
+      "To increase the latency of the system",
+      "To limit the number of users who can interact with the system"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which component of a Memory Context Protocol (MCP) deals with deciding which pieces of information are most important to retain?",
+    "options": [
+      "Representation",
+      "Prioritization",
+      "Retrieval",
+      "Storage"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "When managing handoffs between specialized models, the system should primarily ensure:",
+    "options": [
+      "That the next model receives the complete raw input data",
+      "That the context transferred is relevant and concise",
+      "That the handoff occurs only after the user logs out",
+      "That the original model continues processing simultaneously"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following best describes a challenge addressed by \u201cmanaging context limitations efficiently\u201d?",
+    "options": [
+      "Ensuring the model can run on any hardware architecture",
+      "Operating within the token or memory constraints of the LLM",
+      "Guaranteeing 100% accuracy in all predictions",
+      "Eliminating the need for any external knowledge bases"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Storing intermediate reasoning steps is crucial for:",
+    "options": [
+      "Reducing the model\u2019s training time",
+      "Enabling the agent to revisit and adjust earlier decisions",
+      "Increasing the size of the model\u2019s vocabulary",
+      "Preventing any user interaction during execution"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "In the context of AI systems, \u201cpreserving state during extended operations\u201d most directly supports which type of process?",
+    "options": [
+      "Real\u2011time image classification",
+      "Long\u2011running processes such as research or writing",
+      "Single\u2011turn question answering",
+      "Stateless micro\u2011service calls"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following is a key benefit of standardizing context representation across an AI system?",
+    "options": [
+      "It allows models to ignore user preferences",
+      "It ensures consistent model behavior regardless of the source of the context",
+      "It reduces the need for any memory management",
+      "It automatically improves the model\u2019s training loss"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Tracking authorship and contributions in collaborative systems is important because it:",
+    "options": [
+      "Enables the system to assign credit and manage accountability",
+      "Allows the model to generate random outputs faster",
+      "Prevents the need for any context storage",
+      "Ensures that only one user can interact with the system at a time"
     ],
     "answer": 0
   },
   {
-    "question": "Given the code `user = \"Jane\";`, which statement is true?",
+    "question": "Which of the following is NOT a primary responsibility of an autonomous agent in AI systems?",
     "options": [
-      "The variable `user` is being redeclared with `let`",
-      "The variable `user` is being reassigned, which is allowed",
-      "The code will throw a syntax error because `user` was never declared",
-      "The variable `user` becomes a constant"
+      "Maintaining task state and progress",
+      "Coordinating between planning and execution phases",
+      "Tracking authorship and contributions",
+      "Managing feedback from tool usage"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "In collaborative AI systems, preserving shared context primarily helps to:",
+    "options": [
+      "Reduce the number of model calls required",
+      "Ensure consistent understanding among multiple users and models",
+      "Accelerate the execution of planning phases",
+      "Eliminate the need for long\u2011running processes"
     ],
     "answer": 1
   },
   {
-    "question": "Why does the following line cause an error?\n```js\nlet user = \"New user\"; // after `user = \"Jane\";`\n```",
+    "question": "What is the main purpose of breaking a complex task into multiple model calls in long\u2011running processes?",
     "options": [
-      "Because `let` variables cannot be assigned a value",
-      "Because you cannot redeclare a variable with `let` in the same scope",
-      "Because `user` is a reserved keyword",
-      "Because `let` can only be used inside functions"
+      "To increase the overall latency of the system",
+      "To preserve state across extended operations",
+      "To avoid using any external tools",
+      "To eliminate the need for context management"
     ],
     "answer": 1
   },
   {
-    "question": "Which statement about `const` declarations is correct?",
+    "question": "An MCP (Memory Context Protocol) primarily defines how:",
     "options": [
-      "`const` variables can be reassigned but not redeclared",
-      "`const` creates a block\u2011scoped variable whose value cannot be reassigned",
-      "`const` works only for primitive values, not objects",
-      "`const` variables are automatically global"
+      "Neural network weights are updated during training",
+      "Context is represented, stored, retrieved, prioritized, and updated",
+      "Hardware resources are allocated for inference",
+      "User authentication is performed in AI platforms"
     ],
     "answer": 1
   },
   {
-    "question": "Which of the following is NOT a typical use case for JavaScript according to the overview?",
+    "question": "Which component is essential for managing handoffs between specialized models in a collaborative system?",
     "options": [
-      "Front\u2011end web development",
-      "Back\u2011end server development",
-      "Operating system kernel development",
-      "IoT (Internet of Things) applications"
-    ],
-    "answer": 2
-  },
-  {
-    "question": "In the FizzBuzz program, what will be printed for the number 15?",
-    "options": [
-      "15",
-      "Fizz",
-      "Buzz",
-      "FizzBuzz"
-    ],
-    "answer": 3
-  },
-  {
-    "question": "What is the primary purpose of using an IIFE (Immediately Invoked Function Expression) in JavaScript?",
-    "options": [
-      "To create a named function that can be called later",
-      "To generate private scopes and avoid polluting the global namespace",
-      "To improve the performance of loops",
-      "To automatically convert values to booleans"
+      "Intermediate reasoning step storage",
+      "Authorship tracking",
+      "Context limitation enforcement",
+      "Tool usage feedback loop"
     ],
     "answer": 1
   },
   {
-    "question": "In the higher\u2011order function example, what will be logged by the following code?\n```js\nfunction operateOnNumbers(a, b, operationFn) {\n    return operationFn(a, b);\n}\nconst add = (x, y) => x + y;\nconsole.log(operateOnNumbers(5, 3, add));\n```",
+    "question": "When dealing with context limitations, an effective strategy is to:",
     "options": [
-      "5",
-      "3",
-      "8",
-      "15"
-    ],
-    "answer": 2
-  },
-  {
-    "question": "Which loop is best suited for iterating over the elements of an array without needing the index?",
-    "options": [
-      "Traditional for loop (for (let i = 0; i < arr.length; i++))",
-      "for...in loop",
-      "for...of loop",
-      "while loop"
-    ],
-    "answer": 2
-  },
-  {
-    "question": "Given the object `let person = { name: \"John\", age: 30, job: \"Developer\" };`, what will the following code output?\n```js\nfor (let key in person) {\n    console.log(`${key}: ${person[key]}`);\n}\n```",
-    "options": [
-      "John, 30, Developer",
-      "name, age, job",
-      "name: John\\nage: 30\\njob: Developer",
-      "It will throw a syntax error"
-    ],
-    "answer": 2
-  },
-  {
-    "question": "What is the result of `Boolean(\"\")` in JavaScript?",
-    "options": [
-      "true",
-      "false",
-      "null",
-      "undefined"
+      "Store the entire conversation history without pruning",
+      "Standardize context representation to ensure consistent model behavior",
+      "Ignore context and rely solely on real\u2011time inputs",
+      "Increase the model size to accommodate more tokens"
     ],
     "answer": 1
   },
   {
-    "question": "Which of the following statements about the `let` keyword is true?",
+    "question": "During the execution phase of an autonomous agent, what role does feedback from tool usage play?",
     "options": [
-      "Variables declared with `let` can be redeclared in the same scope",
-      "Variables declared with `let` cannot be reassigned",
-      "Variables declared with `let` are block\u2011scoped and can be reassigned",
-      "`let` creates global variables automatically"
-    ],
-    "answer": 2
-  },
-  {
-    "question": "Why does the line `const PI = 3.14159; PI = 3.14;` cause an error?",
-    "options": [
-      "Because `PI` was declared with `let` instead of `const`",
-      "Because constants cannot be reassigned after initialization",
-      "Because numbers cannot be changed in JavaScript",
-      "Because the value 3.14 is not a valid number"
+      "It updates the shared context for all users",
+      "It helps adjust subsequent planning steps based on real\u2011world outcomes",
+      "It tracks authorship of the tool developers",
+      "It determines the token limit for the next model call"
     ],
     "answer": 1
   },
   {
-    "question": "Which of the following is NOT a typical use case for JavaScript mentioned in the material?",
+    "question": "Which of the following best describes \"preserving state during extended operations\" in long\u2011running processes?",
     "options": [
-      "Front\u2011end web development",
-      "Back\u2011end server development",
-      "Operating system kernel development",
-      "IoT (Internet of Things) applications"
+      "Saving intermediate results so the process can resume after interruptions",
+      "Encrypting all data transmitted between models",
+      "Limiting the number of users who can access the system",
+      "Increasing the batch size for model inference"
     ],
-    "answer": 2
+    "answer": 0
   },
   {
-    "question": "In the FizzBuzz program, what will be printed for the number 15?",
+    "question": "In the context of AI systems, what does \"managing feedback from tool usage\" enable an autonomous agent to do?",
     "options": [
-      "15",
-      "Fizz",
-      "Buzz",
-      "FizzBuzz"
-    ],
-    "answer": 3
-  },
-  {
-    "question": "What is the output of the following code snippet?\n```js\nlet fruits = [\"Apple\", \"Banana\", \"Cherry\"];\nfor (let i = 0; i < fruits.length; i++) {\n    console.log(`Fruit ${i+1}: ${fruits[i]}`);\n}\n```",
-    "options": [
-      "Apple\\nBanana\\nCherry",
-      "Fruit 0: Apple\\nFruit 1: Banana\\nFruit 2: Cherry",
-      "Fruit 1: Apple\\nFruit 2: Banana\\nFruit 3: Cherry",
-      "It will cause a runtime error"
-    ],
-    "answer": 2
-  },
-  {
-    "question": "What is the primary purpose of an IIFE (Immediately Invoked Function Expression) in JavaScript?",
-    "options": [
-      "To create a function that can be called multiple times later",
-      "To define a class with private methods",
-      "To create a private scope and avoid polluting the global namespace",
-      "To enable asynchronous execution of code"
-    ],
-    "answer": 2
-  },
-  {
-    "question": "In the higher\u2011order function example, what will be logged by the following call?\n\noperateOnNumbers(5, 3, multiply);",
-    "options": [
-      "5",
-      "8",
-      "15",
-      "Error because multiply is not defined"
-    ],
-    "answer": 2
-  },
-  {
-    "question": "Which loop is best suited for iterating over the values of an array in ES6?",
-    "options": [
-      "for (let i = 0; i < array.length; i++)",
-      "for...in loop",
-      "while loop",
-      "for...of loop"
-    ],
-    "answer": 3
-  },
-  {
-    "question": "Given the object:\n\nlet person = { name: \"John\", age: 30, job: \"Developer\" };\n\nWhat will be the output of the following code?\n\nfor (let key in person) { console.log(key); }",
-    "options": [
-      "\"John\", \"30\", \"Developer\"",
-      "\"name\", \"age\", \"job\"",
-      "\"person\"",
-      "Undefined"
+      "Generate new tools automatically",
+      "Refine its reasoning and adjust future actions",
+      "Share the tool's source code with collaborators",
+      "Disable the planning phase entirely"
     ],
     "answer": 1
   },
   {
-    "question": "What is the result of Boolean(\"\") in JavaScript?",
+    "question": "Which practice helps maintain coherence across multiple turns of conversation or reasoning steps?",
     "options": [
-      "true",
-      "false",
-      "null",
-      "NaN"
+      "Randomly discarding old context",
+      "Structuring information flow between the model and external systems",
+      "Using a different model for each turn",
+      "Avoiding any form of context storage"
     ],
     "answer": 1
   },
   {
-    "question": "Which of the following statements about the `let` keyword is true?",
+    "question": "What is the primary purpose of an MCP (Memory Context Processor) in AI systems?",
     "options": [
-      "A variable declared with let can be redeclared in the same scope",
-      "A variable declared with let cannot be reassigned",
-      "A variable declared with let can be reassigned but not redeclared in the same scope",
-      "let creates a global variable automatically"
+      "To generate natural language responses",
+      "To define how context is represented, stored, retrieved, prioritized, and updated",
+      "To train large language models on massive datasets",
+      "To evaluate model performance metrics"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which of the following tasks is NOT typically associated with autonomous agents?",
+    "options": [
+      "Storing intermediate reasoning steps",
+      "Coordinating between planning and execution phases",
+      "Tracking authorship and contributions",
+      "Managing feedback from tool usage"
     ],
     "answer": 2
   },
   {
-    "question": "What will happen if you try to reassign a constant declared with `const`?",
+    "question": "In collaborative systems, preserving shared context primarily helps to:",
     "options": [
-      "The value will be updated silently",
-      "JavaScript will create a new variable with the same name",
-      "A runtime TypeError will be thrown",
-      "The code will compile but produce undefined behavior"
+      "Reduce the size of the model parameters",
+      "Enable multiple users and models to maintain a common understanding",
+      "Increase the speed of individual model inference",
+      "Eliminate the need for external tools"
     ],
-    "answer": 2
+    "answer": 1
   },
   {
-    "question": "Which of the following is NOT a typical use case for JavaScript?",
+    "question": "What is a key challenge when handling long\u2011running processes in LLM\u2011driven applications?",
     "options": [
-      "Front\u2011end web development",
-      "Back\u2011end server development with Node.js",
-      "Database schema design",
-      "IoT (Internet of Things) applications"
+      "Generating high\u2011resolution images",
+      "Breaking complex tasks across multiple model calls while preserving state",
+      "Training the model from scratch",
+      "Reducing the vocabulary size"
     ],
-    "answer": 2
+    "answer": 1
   },
   {
-    "question": "In the FizzBuzz program, what will be printed for the number 15?",
+    "question": "Which mechanism helps autonomous agents manage feedback from tool usage?",
     "options": [
-      "15",
-      "Fizz",
-      "Buzz",
-      "FizzBuzz"
+      "Static rule\u2011based scripts",
+      "Dynamic context updates within the MCP",
+      "Hard\u2011coded responses",
+      "Manual user intervention after each step"
     ],
-    "answer": 3
+    "answer": 1
   },
   {
-    "question": "Which loop would you use to iterate over an object's own enumerable properties?",
+    "question": "Tracking authorship and contributions is most relevant to which component of AI systems?",
     "options": [
-      "for...of loop",
-      "for...in loop",
-      "do...while loop",
-      "forEach method"
+      "Autonomous agents",
+      "Collaborative systems",
+      "Long\u2011running processes",
+      "Model compression techniques"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "When a task requires several sequential model calls, what must be preserved to maintain coherence?",
+    "options": [
+      "The original training dataset",
+      "Intermediate reasoning steps and task state",
+      "GPU memory allocation details",
+      "The model's hyper\u2011parameter settings"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Managing handoffs between specialized models is a responsibility of:",
+    "options": [
+      "Autonomous agents",
+      "Collaborative systems",
+      "Long\u2011running processes",
+      "Tokenizers"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Which strategy best addresses context\u2011length limitations in large language models?",
+    "options": [
+      "Increasing the number of model parameters",
+      "Standardizing context representation and efficient prioritization",
+      "Running the model on slower hardware",
+      "Disabling the attention mechanism"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "During a research writing task that spans many model calls, the system must:",
+    "options": [
+      "Reset the context after each call",
+      "Preserve state across calls to maintain continuity",
+      "Only use a single model call to avoid complexity",
+      "Ignore intermediate results"
     ],
     "answer": 1
   }

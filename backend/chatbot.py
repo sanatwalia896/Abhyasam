@@ -60,6 +60,14 @@ class AbhyasamChat:
             ("human", "Generate exactly {num_questions} MCQ questions from the following study material:\n\n{context}")
         ])
 
+        # Prompt for Flashcards generation (escaped curly braces in JSON example)
+        self.flashcard_prompt = ChatPromptTemplate.from_messages([
+            ("system", "You are Abhyasam AI, a teacher AI. Create flashcards from the provided Notion context. "
+                      "Each flashcard must have a 'front' (concept or question) and a 'back' (definition or answer). "
+                      "Return the output as JSON: [{{front: str, back: str}}]"),
+            ("human", "Generate exactly {num_flashcards} flashcards from the following study material:\n\n{context}")
+        ])
+
         # Prompt for generating a single open-ended question
         self.generate_question_prompt = ChatPromptTemplate.from_messages([
             ("system", "You are a teacher AI. Generate one clear, open-ended question to test understanding from the provided Notion context. Just output the question."),
@@ -99,6 +107,14 @@ class AbhyasamChat:
         self.quiz_chain = (
             {"context": lambda x: x["context"], "num_questions": lambda x: x["num_questions"]}
             | self.quiz_prompt
+            | self.llm
+            | JsonOutputParser()
+        )
+
+        # Flashcard chain for generation
+        self.flashcard_chain = (
+            {"context": lambda x: x["context"], "num_flashcards": lambda x: x["num_flashcards"]}
+            | self.flashcard_prompt
             | self.llm
             | JsonOutputParser()
         )
@@ -174,6 +190,53 @@ class AbhyasamChat:
             return formatted_questions
         except Exception as e:
             logger.error(f"Error in quiz generation: {e}")
+            return []
+
+    def generate_flashcards(self, topic_query: str = "key concepts", num_batches: int = 2, flashcards_per_batch: int = 5, page_title: str = None) -> List[Dict]:
+        """Generate flashcards for a specific page_title and return them."""
+        all_flashcards = []
+        try:
+            filter_dict = {"source": "Notion"}
+            if page_title:
+                filter_dict["page_title"] = page_title
+                logger.info(f"Generating flashcards for page_title: {page_title}")
+
+            docs = self.retriever.invoke(topic_query, filter=filter_dict)
+            context = "\n\n".join([doc.page_content for doc in docs])
+
+            if not context:
+                logger.warning("No context retrieved for flashcard generation.")
+                return []
+
+            for batch in range(num_batches):
+                logger.info(f"Generating flashcards batch {batch + 1}/{num_batches}")
+                result = self.flashcard_chain.invoke({
+                    "context": context,
+                    "num_flashcards": flashcards_per_batch
+                })
+                all_flashcards.extend(result)
+
+            all_flashcards = all_flashcards[:20]
+
+            formatted_flashcards = []
+            for f in all_flashcards:
+                if (
+                    isinstance(f, dict) and
+                    "front" in f and
+                    "back" in f
+                ):
+                    formatted_flashcards.append(f)
+                else:
+                    logger.warning(f"Invalid flashcard format: {f}")
+
+            # Optionally, we can also dump these to data/flashcards.json
+            with open("data/flashcards.json", "w") as f:
+                json.dump(formatted_flashcards, f, indent=2)
+            logger.info(f"Dumped {len(formatted_flashcards)} flashcards to data/flashcards.json")
+
+            return formatted_flashcards
+        except Exception as e:
+            logger.error(f"Error in flashcard generation: {e}")
             return []
 
     def start_interactive_quiz(self, session_id: str, num_questions: int, page_title: str = None) -> Dict[str, str]:

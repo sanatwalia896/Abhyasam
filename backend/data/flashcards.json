@@ -1,0 +1,42 @@
+[
+  {
+    "front": "What is the Two Pointer Technique?",
+    "back": "A strategy that uses two indices (pointers) moving through a data structure\u2014often from opposite ends or at different speeds\u2014to solve problems in linear time with O(1) extra space."
+  },
+  {
+    "front": "How does the Two Pointer Technique solve the \"Reverse String\" problem?",
+    "back": "Place one pointer at the start of the character array and another at the end; swap the characters, then move both pointers toward each other until they meet, achieving an in\u2011place reversal."
+  },
+  {
+    "front": "What is the typical two\u2011pointer approach for \"Remove Duplicates from Sorted Array\"?",
+    "back": "Use a slow pointer to mark the position of the last unique element and a fast pointer to scan the array; when the fast pointer finds a new value, increment the slow pointer and copy the value there, resulting in O(1) extra space."
+  },
+  {
+    "front": "In the \"Container With Most Water\" problem, how are the two pointers adjusted after each iteration?",
+    "back": "Start with pointers at the leftmost and rightmost indices; compute the area, then move the pointer pointing to the shorter line inward (because the height limits the area), and repeat until the pointers meet."
+  },
+  {
+    "front": "Which LeetCode problem uses two pointers to find all unique triplets that sum to zero, and how is it solved?",
+    "back": "The \"3Sum\" problem. After sorting the array, fix one element and use two pointers (left and right) to search for pairs whose sum equals the negative of the fixed element, adjusting pointers based on the current sum."
+  },
+  {
+    "front": "What is the Two Pointer Technique and when is it typically used?",
+    "back": "The Two Pointer Technique uses two indices (pointers) that move through a data structure (usually an array or string) at different speeds or directions. It is ideal for problems involving sorted data, pairs/triplets that meet a condition, in\u2011place modifications, or sliding windows, allowing O(n) time and O(1) extra space solutions."
+  },
+  {
+    "front": "How does the \"Reverse String\" problem apply the two\u2011pointer method?",
+    "back": "Initialize one pointer at the start of the string and another at the end. Swap the characters at these pointers, then move the start pointer forward and the end pointer backward. Repeat until the pointers meet or cross, resulting in the string being reversed in\u2011place."
+  },
+  {
+    "front": "In \"Remove Duplicates from Sorted Array\", what are the two pointers and what do they track?",
+    "back": "One pointer (read) scans each element of the sorted array, while the other pointer (write) marks the position to place the next unique value. When the read pointer finds a new value different from the previous one, the write pointer is incremented and that value is copied there, producing a deduplicated prefix of the array."
+  },
+  {
+    "front": "What is the two\u2011pointer strategy for solving the \"Container With Most Water\" problem?",
+    "back": "Place one pointer at the leftmost line and another at the rightmost line. Compute the area (width \u00d7 min(height[left], height[right])). Move the pointer that points to the shorter line inward, because only a taller line could increase the area. Continue until the pointers meet, tracking the maximum area found."
+  },
+  {
+    "front": "Which LeetCode problem uses a two\u2011pointer approach to find all unique triplets that sum to zero, and how is it solved?",
+    "back": "\"3Sum\". First sort the array, then fix one element and use two pointers (low and high) on the remaining sub\u2011array to find pairs that sum to the negative of the fixed element. Adjust pointers based on the current sum and skip duplicates to ensure unique triplets."
+  }
+]

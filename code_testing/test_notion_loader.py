@@ -34,21 +34,21 @@ print(pageid_with_title)
 #     "chunk_id": id
 #     })
 
-# block=loader.get_page_blocks(pageid_with_title['USEFUL CODE SNIPPETS'])
-# contrnt=''
-# for blocks in block:
-#     content = "\n".join([b["text"] for b in blocks])
+block=loader.get_page_blocks(pageid_with_title['USEFUL CODE SNIPPETS'])
+contrnt=''
+for blocks in block:
+    content = "\n".join([b["text"] for b in blocks])
 
-# print(str(content))
-
-
+print(str(content))
 
 
-# splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
-# # chunks = splitter.split_text(str(content))
-# docs=splitter.split_documents([doc])
 
-# print(docs)
+
+splitter=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+# chunks = splitter.split_text(str(content))
+docs=splitter.split_documents([doc])
+
+print(docs)
     
         
 

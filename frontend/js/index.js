@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const API_BASE = 'https://abhyasam.onrender.com';
+  const API_BASE = 'http://127.0.0.1:8000';
   const pageSelect = document.getElementById('page-select');
   const refreshBtn = document.getElementById('refresh-btn');
   const quizBtn = document.getElementById('quiz-btn');
   const chatBtn = document.getElementById('chat-btn');
+  const flashcardsBtn = document.getElementById('flashcards-btn');
   const loading = document.getElementById('loading');
 
   // Initialize particles.js
@@ -71,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isSelected = pageSelect.value !== '';
     quizBtn.disabled = !isSelected;
     chatBtn.disabled = !isSelected;
+    flashcardsBtn.disabled = !isSelected;
   }
 
   async function startQuiz() {
@@ -101,10 +103,34 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = `/chat.html?page_title=${encodeURIComponent(pageSelect.value)}`;
   }
 
+  async function startFlashcards() {
+    if (!pageSelect.value) return;
+    loading.classList.remove('hidden');
+    try {
+      const response = await fetch(`${API_BASE}/api/generate-flashcards`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ page_title: pageSelect.value })
+      });
+      const result = await response.json();
+      if (result.status === 'success') {
+        window.location.href = `/flashcards.html?page_title=${encodeURIComponent(pageSelect.value)}`;
+      } else {
+        alert('Error generating flashcards');
+      }
+    } catch (error) {
+      console.error('Error generating flashcards:', error);
+      alert('Failed to generate flashcards.');
+    } finally {
+      loading.classList.add('hidden');
+    }
+  }
+
   pageSelect.addEventListener('change', toggleButtons);
   refreshBtn.addEventListener('click', refreshPages);
   quizBtn.addEventListener('click', startQuiz);
   chatBtn.addEventListener('click', startChat);
+  flashcardsBtn.addEventListener('click', startFlashcards);
 
   loadPages();
 });

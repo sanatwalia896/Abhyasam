@@ -1,0 +1,117 @@
+{
+  "info": {
+    "name": "Abhyasam API Tests",
+    "description": "Functional tests for Abhyasam AI App",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Get Notion Pages",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/notion-pages",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "notion-pages"]
+        }
+      }
+    },
+    {
+      "name": "2. Run Chat Mode",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"question\": \"What is this concept?\",\n  \"session_id\": \"postman1\",\n  \"page_title\": \"Model Context Protocol\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/chat",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "chat"]
+        }
+      }
+    },
+    {
+      "name": "3. Start Quiz",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"num_questions\": 3,\n  \"session_id\": \"postman1\",\n  \"page_title\": \"Model Context Protocol\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/start-quiz",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "start-quiz"]
+        }
+      }
+    },
+    {
+      "name": "4. Submit Quiz Answer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"answer\": \"My test answer\",\n  \"session_id\": \"postman1\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/submit-quiz-answer",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "submit-quiz-answer"]
+        }
+      }
+    },
+    {
+      "name": "5. Generate Flashcards",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"topic_query\": \"Important concepts\",\n  \"num_batches\": 1,\n  \"flashcards_per_batch\": 5,\n  \"page_title\": \"Model Context Protocol\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/generate-flashcards",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "generate-flashcards"]
+        }
+      }
+    },
+    {
+      "name": "6. Get Flashcards",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/flashcards",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "flashcards"]
+        }
+      }
+    }
+  ]
+}

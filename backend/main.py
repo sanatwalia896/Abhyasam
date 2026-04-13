@@ -60,6 +60,12 @@ class SubmitAnswerRequest(BaseModel):
     answer: str
     session_id: str = "student1"
 
+class FlashcardRequest(BaseModel):
+    topic_query: str = "key concepts"
+    num_batches: int = 2
+    flashcards_per_batch: int = 5
+    page_title: Optional[str] = None
+
 # Ensure data directory exists
 os.makedirs("data", exist_ok=True)
 
@@ -203,6 +209,46 @@ async def get_questions():
     except Exception as e:
         logger.error(f"Error fetching questions: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve questions")
+
+@app.post("/api/generate-flashcards")
+async def generate_flashcards(req: FlashcardRequest):
+    try:
+        if req.num_batches < 1 or req.flashcards_per_batch < 1:
+            raise HTTPException(status_code=400, detail="Invalid flashcard parameters")
+
+        start_time = time.time()
+        flashcards = chatbot.generate_flashcards(
+            topic_query=req.topic_query,
+            num_batches=req.num_batches,
+            flashcards_per_batch=req.flashcards_per_batch,
+            page_title=req.page_title
+        )
+
+        if not flashcards:
+            raise HTTPException(status_code=500, detail="No flashcards generated. Ensure Notion pages are synced.")
+
+        generation_time = round(time.time() - start_time, 2)
+        return {
+            "status": "success",
+            "flashcards_count": len(flashcards),
+            "page_title": req.page_title or "All pages",
+            "generation_time": generation_time
+        }
+    except Exception as e:
+        logger.error(f"Error generating flashcards: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to generate flashcards: {str(e)}")
+
+@app.get("/api/flashcards")
+async def get_flashcards():
+    try:
+        with open("data/flashcards.json", "r") as f:
+            flashcards = json.load(f)
+        return {"status": "success", "flashcards": flashcards}
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Flashcards not generated yet.")
+    except Exception as e:
+        logger.error(f"Error fetching flashcards: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve flashcards")
 
 @app.get("/api/health")
 async def health_check():
