@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const API_BASE = 'https://abhyasam.onrender.com';
+  // const API_BASE="http://localhost:8000"
   const pageSelect = document.getElementById('page-select');
   const numQuestionsInput = document.getElementById('num-questions');
   const startQuizBtn = document.getElementById('start-quiz-btn');
