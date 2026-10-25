@@ -1,7 +1,6 @@
 import os
 import time
 from pathlib import Path
-from dotenv import load_dotenv
 
 # Notion loader
 from notion_loader import NotionPageLoader
@@ -19,6 +18,7 @@ from uuid import uuid4
 from langchain_core.documents import Document
 from langchain_pinecone import PineconeVectorStore
 from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from fastembed import TextEmbedding
 # model = "sentence-transformers/all-mpnet-base-v2"
 # hf_embeddings = HuggingFaceEndpointEmbeddings(
 #     model=model,
@@ -51,17 +51,18 @@ class AbhyasamRAG:
         self.cloud = cloud
         self.region = region
         self.namespace = namespace
+        self.EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+        print("Loading embedding model (downloads on first run)...")
 
-        self.embeddings = HuggingFaceEndpointEmbeddings(
-            model = "sentence-transformers/all-mpnet-base-v2",
-            task="feature-extraction",
-            huggingfacehub_api_token=os.environ.get("HUGGINGFACE_TOKEN")
+        self.embeddings = TextEmbedding(
+            model_name=self.EMBEDDING_MODEL,
+            cache_dir=os.path.expanduser("~/.cache/fastembed"),
         )
 
         if not self.pc.has_index(self.index_name):
             self.pc.create_index(
                 name=self.index_name,
-                dimension=768,
+                dimension=384,
                 metric="cosine",
                 spec=ServerlessSpec(cloud="aws", region="us-east-1"),
             )
