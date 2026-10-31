@@ -1,0 +1,15 @@
+services:
+  api:
+    build: .
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8000:8080"
+    restart: unless-stopped
+
+  sync:
+    build: .
+    profiles: ["sync"]
+    env_file:
+      - ./backend/.env
+    command: ["python", "populate_vectors.py"]

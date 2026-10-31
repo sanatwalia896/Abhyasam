@@ -1,42 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abhyasam</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="/css/index.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Abhyasam · Your study workspace</title>
+<link rel="stylesheet" href="/css/quiz.css?v=flip8">
+<link rel="stylesheet" href="/css/index.css?v=flip8">
 </head>
 <body>
-  <div id="particles"></div>
-  <div class="container">
-    <header>
-      <h1><i class="fas fa-brain"></i> Abhyasam</h1>
-      <p>Revise your Notion notes with interactive quizzes or Q&A</p>
-      
-    </header>
-    <div class="divider">
-      <p class="text-center text-sm text-gray-400 mb-6">Note: The backend is hosted on Render's free tier, so initial responses may take a few seconds due to cold starts.</p>
-    </div> 
-    <main>
-      <div class="controls">
-        <select id="page-select" class="input-field">
-          <option value="">Select a Notion page</option>
-        </select>
-        <button id="refresh-btn" class="action-btn"><i class="fas fa-sync"></i> Refresh Pages</button>
-      </div>
-      <div class="actions">
-        <button id="quiz-btn" class="action-btn" disabled><i class="fas fa-question-circle"></i> Start Quiz</button>
-        <button id="chat-btn" class="action-btn" disabled><i class="fas fa-comment-dots"></i> Ask Questions</button>
-        <button id="flashcards-btn" class="action-btn" disabled><i class="fas fa-layer-group"></i> Flashcards</button>
-      </div>
-      <div id="loading" class="loading hidden">
-        <i class="fas fa-spinner fa-spin"></i> Loading...
-      </div>
-    </main>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script src="/js/index.js"></script>
-</body>
-</html>
+<header><a class="brand" href="/index.html">◈ Abhyasam</a><nav class="mode-nav" aria-label="Study modes"><a href="/quiz.html">MCQ quizzes</a><a href="/chat.html">Ask your notes</a><a href="/short-answer.html">Short answers</a><a href="/flashcards.html">Flashcards</a></nav></header>
+<main>
+<section class="hero">
+<div><p class="eyebrow">A SMALL DAILY PRACTICE</p><h1>Turn what you know<br>into what you remember.</h1><p class="intro">Bring your Notion notes into focus. Test a concept, ask a question, or revisit the ideas that deserve another look.</p>
+<a class="primary-link" id="quiz-btn" href="/quiz.html">Open MCQ library <span>↗</span></a></div>
+<aside class="panel daily-card"><p class="eyebrow">YOUR NEXT STUDY SESSION</p><h2>Read. Recall.<br>Make it stick.</h2><p>Saved quizzes are ready whenever you are. Generate a new set only when you want something fresh.</p><div class="pill">A / B / C / D</div></aside>
+</section>
+<section class="panel source-panel">
+<div class="section-heading"><div><p class="eyebrow">YOUR SOURCE MATERIAL</p><h2>Choose what to practise</h2></div><span id="page-count" class="pill">Connecting…</span></div>
+<div class="source-controls"><label>Notion page<select id="page-select"><option value="">All synced pages</option></select></label><button id="refresh-btn" class="secondary" type="button">↻ Sync notes</button></div>
+<p id="status" role="status" aria-live="polite">Loading your synced pages…</p>
+</section>
+<section class="mode-grid" aria-label="Study modes">
+<a class="mode-card" id="mcq-card" href="/quiz.html"><span class="mode-number">01 / TEST</span><h2>MCQ practice ↗</h2><p>Choose your question count, generate a set, or revisit a saved quiz.</p><span class="mode-foot">Options, scores & explanations</span></a>
+<a class="mode-card" id="chat-btn" href="/chat.html"><span class="mode-number">02 / UNDERSTAND</span><h2>Ask your notes ↗</h2><p>Work through a difficult idea with answers grounded in your study material.</p><span class="mode-foot">A conversation with context</span></a>
+<button class="mode-card" id="flashcards-btn" type="button"><span class="mode-number">03 / RECALL</span><h2>Flashcards ↗</h2><p>Generate a quick deck of concepts and definitions for active recall.</p><span class="mode-foot">Flip, remember, repeat</span></button>
+<a class="mode-card" id="short-answer-link" href="/short-answer.html"><span class="mode-number">04 / EXPLAIN</span><h2>Short answers ↗</h2><p>Put the idea into your own words, then get feedback on your answer.</p><span class="mode-foot">Go beyond recognition</span></a>
+</section>
+</main><footer>Abhyasam · A little practice, every day.</footer>
+<script src="/js/deployment-config.js?v=flip8"></script><script src="/js/config.js?v=flip8"></script><script src="/js/index.js?v=flip8"></script>
+</body></html>

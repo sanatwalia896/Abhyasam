@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "buildCommand": "node scripts/build-frontend.mjs",
+  "outputDirectory": "frontend",
+  "cleanUrls": false,
+  "headers": [
+    {"source": "/js/deployment-config.js", "headers": [{"key": "Cache-Control", "value": "no-store"}]}
+  ]
+}

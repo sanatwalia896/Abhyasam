@@ -33,14 +33,31 @@ class NotionPageLoader:
             "filter": {"value": "page", "property": "object"},
             "sort": {"direction": "descending", "timestamp": "last_edited_time"}
         }
+        page_ids = []
+        next_cursor = None
         try:
-            response = requests.post(url, headers=self.headers, json=payload)
-            response.raise_for_status()
-            data = response.json()
-            return [result["id"] for result in data.get("results", []) if result["object"] == "page"]
+            while True:
+                request_payload = dict(payload)
+                if next_cursor:
+                    request_payload["start_cursor"] = next_cursor
+                response = requests.post(
+                    url,
+                    headers=self.headers,
+                    json=request_payload,
+                    timeout=30,
+                )
+                response.raise_for_status()
+                data = response.json()
+                page_ids.extend(
+                    result["id"]
+                    for result in data.get("results", [])
+                    if result.get("object") == "page"
+                )
+                if not data.get("has_more"):
+                    return page_ids
+                next_cursor = data.get("next_cursor")
         except requests.RequestException as e:
-            print(f"Failed to search pages: {e}")
-            return []
+            raise RuntimeError(f"Failed to search pages: {e}") from e
 
     def get_page_title(self, page_id: str) -> str:
         """
@@ -54,7 +71,7 @@ class NotionPageLoader:
         """
         url = f"https://api.notion.com/v1/pages/{page_id}"
         try:
-            response = requests.get(url, headers=self.headers)
+            response = requests.get(url, headers=self.headers, timeout=30)
             response.raise_for_status()
             data = response.json()
             props = data.get("properties", {})
@@ -80,17 +97,26 @@ class NotionPageLoader:
         """
         url = f"https://api.notion.com/v1/blocks/{block_id}/children"
         results = []
-        while url:
+        next_cursor = None
+        while True:
             try:
-                response = requests.get(url, headers=self.headers)
+                params = {"start_cursor": next_cursor} if next_cursor else {}
+                response = requests.get(
+                    url,
+                    headers=self.headers,
+                    params=params,
+                    timeout=30,
+                )
                 response.raise_for_status()
                 data = response.json()
                 results.extend(data.get("results", []))
-                url = f"{url}?start_cursor={data['next_cursor']}" if data.get("has_more") else None
+                if not data.get("has_more"):
+                    return results
+                next_cursor = data.get("next_cursor")
             except requests.RequestException as e:
-                print(f"Failed to fetch blocks for {block_id}: {e}")
-                return results
-        return results
+                raise RuntimeError(
+                    f"Failed to fetch blocks for {block_id}: {e}"
+                ) from e
 
     def get_block_content(self, block: Dict[str, Any]) -> str:
         """

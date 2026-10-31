@@ -10,8 +10,12 @@ from langchain_pinecone import PineconeVectorStore
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
-from langchain_core.output_parsers import JsonOutputParser
+from embedding_adapter import FastEmbedLangChainAdapter
+from cloud_artifacts import load_session, save_session
+from langchain_core.documents import Document
+from langchain_core.messages import messages_to_dict, messages_from_dict
+from json_output import parse_json_response
+from groq_pacing import PacedGroq
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -21,29 +25,25 @@ load_dotenv()
 class AbhyasamChat:
     """Abhyasam AI: Chat and quiz generation from Notion knowledge base with page-specific filtering."""
 
-    def __init__(self, model_name: str = "openai/gpt-oss-20b"):
+    def __init__(self, model_name: str | None = None):
         self.store = {}
-        self.index_name = "abhyasam-index"
-        self.model_name = model_name  # Use a valid Groq model
+        self.index_name = os.getenv("PINECONE_INDEX_NAME", "abhyasam-fastembed-index")
+        self.model_name = model_name or os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
+        self.namespace = os.getenv("PINECONE_NAMESPACE", "notion-knowledge")
 
-        # Initialize HuggingFace embeddings
-        self.hf_embeddings = HuggingFaceEndpointEmbeddings(
-            model="sentence-transformers/all-mpnet-base-v2",
-            task="feature-extraction",
-            huggingfacehub_api_token=os.environ.get("HUGGINGFACE_TOKEN"),
-        )
+        # Use the same 384-dimensional model used during ingestion.
+        self.hf_embeddings = FastEmbedLangChainAdapter()
 
         # Initialize Pinecone
         pinecone_api_key = os.environ.get("PINECONE_API_KEY")
         pc = Pinecone(api_key=pinecone_api_key)
         self.index = pc.Index(self.index_name)
-        self.vectorstore = PineconeVectorStore(index=self.index, embedding=self.hf_embeddings)
-
-        # Base retriever for document retrieval
-        self.retriever = self.vectorstore.as_retriever(
-            search_type="mmr",
-            search_kwargs={"k": 6, "lambda_mult": 0.25, "namespace": "notion-knowledge"}
+        self.vectorstore = PineconeVectorStore(
+            index=self.index,
+            embedding=self.hf_embeddings,
+            namespace=self.namespace,
         )
+
 
         # Prompt for question answering
         self.base_prompt = ChatPromptTemplate.from_messages([
@@ -52,19 +52,12 @@ class AbhyasamChat:
             ("human", "{question}")
         ])
 
-        # Prompt for MCQ quiz generation (escaped curly braces in JSON example)
-        self.quiz_prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are Abhyasam AI, a teacher AI. Create only MCQ quizzes from the provided Notion context. "
-                      "Each question must have 4 options (A, B, C, D) and specify the correct answer as a letter (A, B, C, or D). "
-                      "Return the output as JSON: [{{question: str, options: {{A: str, B: str, C: str, D: str}}, answer: str}}]"),
-            ("human", "Generate exactly {num_questions} MCQ questions from the following study material:\n\n{context}")
-        ])
 
         # Prompt for Flashcards generation (escaped curly braces in JSON example)
         self.flashcard_prompt = ChatPromptTemplate.from_messages([
             ("system", "You are Abhyasam AI, a teacher AI. Create flashcards from the provided Notion context. "
                       "Each flashcard must have a 'front' (concept or question) and a 'back' (definition or answer). "
-                      "Return the output as JSON: [{{front: str, back: str}}]"),
+                      'Return ONLY valid JSON: {{"flashcards":[{{"front":"question","back":"answer"}}]}}'),
             ("human", "Generate exactly {num_flashcards} flashcards from the following study material:\n\n{context}")
         ])
 
@@ -77,17 +70,27 @@ class AbhyasamChat:
         # Prompt for evaluating user's answer (escaped curly braces in JSON)
         self.evaluate_prompt = ChatPromptTemplate.from_messages([
             ("system", "You are a teacher AI. Evaluate the student's answer based on the question and Notion context. "
-                      "Return JSON: {{'score': int, 'feedback': str}}"),
+                      'Return ONLY valid JSON: {{"score": 8, "feedback": "Explain the evaluation here"}}'),
             ("human", "Question: {question}\nStudent Answer: {answer}\nContext: {context}")
         ])
 
         # Initialize Groq LLM
-        self.llm = ChatGroq(model=self.model_name, groq_api_key=os.getenv("GROQ_API_KEY"))
+        self.llm = PacedGroq(ChatGroq(
+            model=self.model_name, groq_api_key=os.getenv("GROQ_API_KEY"),
+            max_retries=0, timeout=90, max_tokens=2048,
+            reasoning_effort="low" if self.model_name.startswith("openai/gpt-oss") else None,
+        ))
 
         # Retrieval chain for question answering
         self.retrieval_chain = (
             {
-                "context": lambda x: "\n\n".join([doc.page_content for doc in self.retriever.invoke(x["question"], filter=x.get("filter", {"source": "Notion"}))]),
+                "context": lambda x: "\n\n".join([
+                    doc.page_content
+                    for doc in self._retrieve(
+                        x["question"],
+                        x.get("filter", {"source": "Notion"}),
+                    )
+                ]),
                 "question": lambda x: x["question"],
                 "history": lambda x: x["history"]
             }
@@ -103,27 +106,34 @@ class AbhyasamChat:
             history_messages_key="history"
         )
 
-        # Quiz chain for MCQ generation (no history)
-        self.quiz_chain = (
-            {"context": lambda x: x["context"], "num_questions": lambda x: x["num_questions"]}
-            | self.quiz_prompt
-            | self.llm
-            | JsonOutputParser()
-        )
 
-        # Flashcard chain for generation
-        self.flashcard_chain = (
-            {"context": lambda x: x["context"], "num_flashcards": lambda x: x["num_flashcards"]}
-            | self.flashcard_prompt
-            | self.llm
-            | JsonOutputParser()
-        )
 
     def get_session_history(self, session_id: str) -> ChatMessageHistory:
         """Retrieve or create session history for chat."""
-        if session_id not in self.store:
-            self.store[session_id] = ChatMessageHistory()
+        saved = load_session("chat", session_id)
+        self.store[session_id] = ChatMessageHistory(messages=messages_from_dict(saved["messages"]) if saved else [])
         return self.store[session_id]
+
+    def _retrieve(self, query: str, filter_dict: dict, k: int = 8):
+        """Use the vector store directly so Pinecone receives the filter."""
+        documents = self.vectorstore.similarity_search(
+            query,
+            k=k,
+            filter=filter_dict,
+            namespace=self.namespace,
+        )
+        logger.info(
+            "Pinecone retrieval: index=%s namespace=%s filter=%s documents=%d",
+            self.index_name,
+            self.namespace,
+            filter_dict,
+            len(documents),
+        )
+        return documents
+
+    @staticmethod
+    def _parse_json(content: str):
+        return parse_json_response(content)
 
     def ask_question(self, question: str, session_id: str = "student1", page_title: str = None) -> Dict[str, str]:
         """Ask a question with optional page_title filter."""
@@ -137,60 +147,17 @@ class AbhyasamChat:
                 {"question": question, "filter": filter_dict},
                 config={"configurable": {"session_id": session_id}},
             )
+            save_session("chat", session_id, {"messages": messages_to_dict(self.store[session_id].messages[-40:])})
             return {"answer": result.content}
         except Exception as e:
             logger.error(f"Error in chat: {e}")
-            return {"answer": "⚠️ Something went wrong."}
+            raise
 
-    def generate_quiz(self, topic_query: str = "key concepts", num_batches: int = 3, questions_per_batch: int = 10, page_title: str = None) -> List[Dict]:
-        """Generate MCQ quizzes for a specific page_title and dump to questions.json."""
-        all_questions = []
-        try:
-            filter_dict = {"source": "Notion"}
-            if page_title:
-                filter_dict["page_title"] = page_title
-                logger.info(f"Generating quiz for page_title: {page_title}")
+    def generate_quiz(self, topic_query="key concepts", num_batches=1, questions_per_batch=10, page_title=None):
+        """Compatibility entry point for MCQ generation."""
+        from mcq_service import MCQService
+        return MCQService(self).generate(topic_query, num_batches * questions_per_batch, page_title)
 
-            docs = self.retriever.invoke(topic_query, filter=filter_dict)
-            context = "\n\n".join([doc.page_content for doc in docs])
-
-            if not context:
-                logger.warning("No context retrieved for quiz generation.")
-                return []
-
-            for batch in range(num_batches):
-                logger.info(f"Generating quiz batch {batch + 1}/{num_batches}")
-                result = self.quiz_chain.invoke({
-                    "context": context,
-                    "num_questions": questions_per_batch
-                })
-                all_questions.extend(result)
-
-            all_questions = all_questions[:30]
-
-            formatted_questions = []
-            for q in all_questions:
-                if (
-                    isinstance(q, dict) and
-                    "question" in q and
-                    "options" in q and
-                    isinstance(q["options"], dict) and
-                    all(k in q["options"] for k in ["A", "B", "C", "D"]) and
-                    "answer" in q and
-                    q["answer"] in ["A", "B", "C", "D"]
-                ):
-                    formatted_questions.append(q)
-                else:
-                    logger.warning(f"Invalid question format: {q}")
-
-            with open("data/questions.json", "w") as f:
-                json.dump(formatted_questions, f, indent=2)
-            logger.info(f"Dumped {len(formatted_questions)} questions to data/questions.json")
-
-            return formatted_questions
-        except Exception as e:
-            logger.error(f"Error in quiz generation: {e}")
-            return []
 
     def generate_flashcards(self, topic_query: str = "key concepts", num_batches: int = 2, flashcards_per_batch: int = 5, page_title: str = None) -> List[Dict]:
         """Generate flashcards for a specific page_title and return them."""
@@ -201,19 +168,27 @@ class AbhyasamChat:
                 filter_dict["page_title"] = page_title
                 logger.info(f"Generating flashcards for page_title: {page_title}")
 
-            docs = self.retriever.invoke(topic_query, filter=filter_dict)
+            docs = self._retrieve(topic_query, filter_dict, k=12)
             context = "\n\n".join([doc.page_content for doc in docs])
 
             if not context:
-                logger.warning("No context retrieved for flashcard generation.")
-                return []
+                raise RuntimeError(
+                    f"No context retrieved from Pinecone index "
+                    f"'{self.index_name}' namespace '{self.namespace}'. "
+                    "Check that ingestion used the same index and namespace."
+                )
 
             for batch in range(num_batches):
                 logger.info(f"Generating flashcards batch {batch + 1}/{num_batches}")
-                result = self.flashcard_chain.invoke({
-                    "context": context,
-                    "num_flashcards": flashcards_per_batch
-                })
+                response = self.llm.bind(response_format={"type": "json_object"}).invoke(
+                    self.flashcard_prompt.format_messages(
+                        context=context,
+                        num_flashcards=flashcards_per_batch,
+                    )
+                )
+                result = self._parse_json(response.content)
+                if isinstance(result, dict):
+                    result = result.get("flashcards", result.get("cards", []))
                 all_flashcards.extend(result)
 
             all_flashcards = all_flashcards[:20]
@@ -223,21 +198,19 @@ class AbhyasamChat:
                 if (
                     isinstance(f, dict) and
                     "front" in f and
-                    "back" in f
+                    "back" in f and
+                    isinstance(f["front"], str) and bool(f["front"].strip()) and
+                    isinstance(f["back"], str) and bool(f["back"].strip())
                 ):
                     formatted_flashcards.append(f)
                 else:
                     logger.warning(f"Invalid flashcard format: {f}")
 
-            # Optionally, we can also dump these to data/flashcards.json
-            with open("data/flashcards.json", "w") as f:
-                json.dump(formatted_flashcards, f, indent=2)
-            logger.info(f"Dumped {len(formatted_flashcards)} flashcards to data/flashcards.json")
 
             return formatted_flashcards
         except Exception as e:
             logger.error(f"Error in flashcard generation: {e}")
-            return []
+            raise
 
     def start_interactive_quiz(self, session_id: str, num_questions: int, page_title: str = None) -> Dict[str, str]:
         """Initialize an interactive quiz session with specified number of questions."""
@@ -252,10 +225,11 @@ class AbhyasamChat:
                 logger.info(f"Quiz filtered by page_title: {page_title}")
 
             # Fetch diverse documents for quiz
-            original_k = self.retriever.search_kwargs['k']
-            self.retriever.search_kwargs['k'] = max(20, num_questions * 2)
-            docs = self.retriever.invoke("generate diverse quiz questions", filter=filter_dict)
-            self.retriever.search_kwargs['k'] = original_k
+            docs = self._retrieve(
+                "generate diverse quiz questions",
+                filter_dict,
+                k=max(20, num_questions * 2),
+            )
 
             if len(docs) < num_questions:
                 logger.warning(f"Not enough content retrieved: {len(docs)} chunks.")
@@ -277,6 +251,7 @@ class AbhyasamChat:
             # Generate first question
             question = self._generate_single_question(selected_docs[0].page_content)
             self.store[session_id + "_quiz"]["questions"].append(question)
+            self._save_practice(session_id, self.store[session_id + "_quiz"])
 
             return {
                 "status": "success",
@@ -286,7 +261,13 @@ class AbhyasamChat:
             }
         except Exception as e:
             logger.error(f"Error starting quiz: {e}")
-            return {"status": "error", "message": "Failed to start quiz."}
+            raise
+
+    def _save_practice(self, session_id, state):
+        save_session("short-answer", session_id, {
+            **state,
+            "docs": [{"page_content": doc.page_content, "metadata": doc.metadata} for doc in state["docs"]],
+        })
 
     def _generate_single_question(self, context: str) -> str:
         """Generate a single open-ended question from context."""
@@ -296,9 +277,12 @@ class AbhyasamChat:
     def submit_quiz_answer(self, session_id: str, answer: str) -> Dict[str, any]:
         """Evaluate user's answer and return feedback or next question."""
         try:
-            quiz_state = self.store.get(session_id + "_quiz")
+            quiz_state = load_session("short-answer", session_id)
             if not quiz_state:
                 return {"status": "error", "message": "No active quiz session."}
+            if quiz_state.get("complete"):
+                return {"status": "error", "message": "This practice is complete. Start a new session."}
+            quiz_state["docs"] = [Document(**doc) for doc in quiz_state["docs"]]
 
             current = quiz_state["current_question"]
             context = quiz_state["docs"][current].page_content
@@ -314,7 +298,7 @@ class AbhyasamChat:
 
             # Parse evaluation (expecting JSON)
             try:
-                eval_result = json.loads(evaluation.content)
+                eval_result = self._parse_json(evaluation.content)
                 score = eval_result["score"]
                 feedback = eval_result["feedback"]
             except:
@@ -329,6 +313,7 @@ class AbhyasamChat:
             if quiz_state["current_question"] < len(quiz_state["docs"]):
                 next_question = self._generate_single_question(quiz_state["docs"][quiz_state["current_question"]].page_content)
                 quiz_state["questions"].append(next_question)
+                self._save_practice(session_id, quiz_state)
                 return {
                     "status": "success",
                     "question_number": quiz_state["current_question"] + 1,
@@ -339,7 +324,8 @@ class AbhyasamChat:
                 }
             else:
                 avg_score = sum(quiz_state["scores"]) / len(quiz_state["scores"]) if quiz_state["scores"] else 0
-                del self.store[session_id + "_quiz"]  # Clear quiz state
+                self.store.pop(session_id + "_quiz", None)
+                self._save_practice(session_id, {**quiz_state, "complete": True})
                 return {
                     "status": "complete",
                     "message": f"Quiz complete! Average score: {avg_score:.1f}/10",
@@ -348,7 +334,7 @@ class AbhyasamChat:
                 }
         except Exception as e:
             logger.error(f"Error submitting quiz answer: {e}")
-            return {"status": "error", "message": "Failed to process answer."}
+            raise
 
 if __name__ == "__main__":
     chat = AbhyasamChat()

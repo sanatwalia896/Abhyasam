@@ -1,26 +1,19 @@
-# Base image
-FROM python:3.11-slim
-
-# Set working directory
-WORKDIR /app
-
-# Install system dependencies (supervisord)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    supervisor \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python dependencies
-COPY backend/requirements.txt /app/backend/requirements.txt
-RUN pip install --no-cache-dir -r /app/backend/requirements.txt
-
-# Copy project files
-COPY . /app
-
-# Copy supervisord config
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Expose backend (8000) and frontend (3000)
-EXPOSE 8000 3000
-
-# Start both processes
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+FROM python:3.12-slim
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 \
+    FASTEMBED_CACHE_PATH=/opt/fastembed \
+    FASTEMBED_THREADS=2 SERVE_FRONTEND=false
+WORKDIR /app/backend
+COPY backend/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+# Bake the actual model and verify it once while network access is available.
+COPY backend/embedding_runtime.py ./embedding_runtime.py
+RUN python embedding_runtime.py
+# Runtime must use the baked files; a missing model fails instead of downloading.
+ENV FASTEMBED_LOCAL_FILES_ONLY=true HF_HUB_OFFLINE=1 PORT=8080
+RUN python embedding_runtime.py
+COPY backend/ ./
+RUN useradd --create-home --uid 10001 appuser \
+    && chown -R appuser:appuser /app /opt/fastembed
+USER appuser
+EXPOSE 8080
+CMD ["sh", "-c", "exec python -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1"]

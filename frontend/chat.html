@@ -1,47 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abhyasam Chat</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
-  <link rel="stylesheet" href="/css/chat.css">
-</head>
-<body>
-  <div id="particles"></div>
-  <div class="chat-container">
-    <header class="chat-header">
-      <div class="header-content">
-        <h1><i class="fas fa-brain"></i> Abhyasam Chat</h1>
-        <p class="header-subtitle">Ask questions about your Notion notes or generate a quiz</p>
-      </div>
-    </header>
-    <main>
-      <div class="controls">
-        <select id="page-select" class="input-field">
-          <option value="">Select a Notion page</option>
-        </select>
-        <button id="refresh-btn" class="action-btn"><i class="fas fa-sync"></i> Refresh Pages</button>
-      </div>
-      <div class="navigation">
-        <a href="/index.html" class="action-btn"><i class="fas fa-home"></i> Back to Home</a>
-        <a id="quiz-link" href="/quiz.html" class="action-btn"><i class="fas fa-question-circle"></i> Take Quiz</a>
-      </div>
-      <div id="chat-area" class="chat-area"></div>
-      <div class="input-container">
-        <input type="text" id="question-input" class="input-field" placeholder="Ask a question or type 'quiz' to generate a quiz...">
-        <button id="send-btn" class="action-btn"><i class="fas fa-paper-plane"></i> Send</button>
-      </div>
-      <div id="loading" class="loading hidden">
-        <i class="fas fa-spinner fa-spin"></i> Processing...
-      </div>
-    </main>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
-  <script src="/js/chat.js"></script>
-</body>
-</html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Abhyasam · Ask your notes</title><link rel="stylesheet" href="/css/quiz.css?v=flip8"><link rel="stylesheet" href="/css/study.css?v=flip8"></head>
+<body><header><a class="brand" href="/index.html">◈ Abhyasam</a><nav class="mode-nav" aria-label="Study modes"><a href="/quiz.html">MCQ quizzes</a><a href="/chat.html">Ask your notes</a><a href="/short-answer.html">Short answers</a><a href="/flashcards.html">Flashcards</a></nav></header><main><section class="heading"><p class="eyebrow">YOUR STUDY WORKSPACE</p><h1>Ask your notes</h1><p>Explore a concept with answers grounded in your Notion material.</p></section><section class="panel"><div class="controls"><label>Notion page<select id="page-select"><option value="">All synced pages</option></select></label><button id="refresh-btn" class="secondary">Sync notes</button><a id="quiz-link" href="/quiz.html">MCQ library ↗</a></div><div id="chat-area" class="conversation" role="log" aria-live="polite"><p class="empty">What would you like to understand today?</p></div><form id="chat-form" class="compose"><label class="grow">Your question<textarea id="question-input" placeholder="Ask about an idea in your notes…" required></textarea></label><button id="send-btn" type="submit">Send question ↗</button></form><p id="loading" class="hint hidden">Thinking through your notes…</p></section><p id="status" role="status" aria-live="polite"></p></main>
+<script src="/js/deployment-config.js?v=flip8"></script><script src="/js/config.js?v=flip8"></script><script src="/js/study.js?v=flip8"></script><script src="/js/chat.js?v=flip8"></script></body></html>

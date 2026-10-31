@@ -1,0 +1,3 @@
+/* Compatibility entry point: share the same theme as all study screens. */
+@import url("/css/quiz.css?v=blue6");
+@import url("/css/study.css?v=blue6");

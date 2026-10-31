@@ -1,0 +1,86 @@
+name: Deploy backend to Cloud Run
+on:
+  push:
+    branches: [main]
+    paths: ['backend/**', 'Dockerfile', '.dockerignore', 'code_testing/**', '.github/workflows/deploy-backend.yml']
+  workflow_dispatch:
+
+concurrency:
+  group: cloud-run-backend
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+      REGION: ${{ vars.GCP_REGION }}
+      REPOSITORY: ${{ vars.ARTIFACT_REPOSITORY }}
+      SERVICE: ${{ vars.CLOUD_RUN_SERVICE }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify backend
+        run: |
+          pip install -r backend/requirements.txt httpx
+          python -m unittest discover -s code_testing -p 'test_mcq*.py'
+          python -m unittest discover -s code_testing -p test_quiz_storage.py
+          python -m unittest discover -s code_testing -p test_cloud_artifacts.py
+          python -m unittest discover -s code_testing -p test_collection_limit.py
+          python -m unittest discover -s code_testing -p test_chunk_buffer.py
+          python -m unittest discover -s code_testing -p test_storage_slots.py
+          python -m unittest discover -s code_testing -p test_groq_pacing.py
+      - name: Build image with baked model
+        run: |
+          docker build --platform linux/amd64 -t "$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$SERVICE:$GITHUB_SHA" .
+          docker run --rm --network none "$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$SERVICE:$GITHUB_SHA" python embedding_runtime.py
+      # Authenticate after the potentially long model download/build.
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.DEPLOY_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Push image
+        run: |
+          gcloud auth configure-docker "$REGION-docker.pkg.dev" --quiet
+          docker push "$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$SERVICE:$GITHUB_SHA"
+      - uses: google-github-actions/deploy-cloudrun@v3
+        id: deploy
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
+          env_vars: |
+            GOOGLE_CLOUD_PROJECT=${{ vars.GCP_PROJECT_ID }}
+            GCS_BUCKET_NAME=abhyasam-1234
+            PINECONE_INDEX_NAME=${{ vars.PINECONE_INDEX_NAME }}
+            PINECONE_NAMESPACE=notion-knowledge
+            GROQ_MODEL=openai/gpt-oss-20b
+            CORS_ORIGINS=${{ vars.VERCEL_ORIGIN }}
+          secrets: |
+            GROQ_API_KEY=groq-api-key:latest
+            PINECONE_API_KEY=pinecone-api-key:latest
+            NOTION_TOKEN=notion-token:latest
+          flags: >-
+            --service-account=${{ vars.RUNTIME_SERVICE_ACCOUNT }}
+            --port=8080
+            --memory=2Gi
+            --cpu=2
+            --concurrency=4
+            --max-instances=1
+            --min-instances=0
+            --timeout=900
+            --allow-unauthenticated
+      - name: Check deployed API
+        env:
+          SERVICE_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          curl --fail --retry 5 --retry-delay 3 "$SERVICE_URL/api/health"
+          curl --fail "$SERVICE_URL/api/mcq/sets"

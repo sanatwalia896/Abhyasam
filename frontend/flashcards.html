@@ -1,52 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abhyasam Flashcards</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="/css/flashcard.css">
-</head>
-<body>
-  <div id="particles"></div>
-  <div class="flashcard-container">
-    <div class="header">
-      <h1><i class="fas fa-layer-group"></i> Abhyasam Flashcards</h1>
-      <p id="page-title-display">Loading flashcards...</p>
-    </div>
-    
-    <main>
-      <div id="loading" class="loading hidden">
-        <i class="fas fa-spinner fa-spin"></i> Processing...
-      </div>
-
-      <div class="flashcard-viewer hidden" id="flashcard-viewer">
-        <div class="flashcard-scene" onclick="toggleFlip()">
-          <div class="flashcard" id="active-flashcard">
-            <div class="flashcard-face flashcard-front">
-              <div class="flashcard-content" id="flashcard-front-content">Front</div>
-            </div>
-            <div class="flashcard-face flashcard-back">
-              <div class="flashcard-content" id="flashcard-back-content">Back</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="controls">
-          <button id="prev-btn" class="action-btn" onclick="prevCard()"><i class="fas fa-arrow-left"></i> Prev</button>
-          <span id="flashcard-counter" class="counter">1 / 10</span>
-          <button id="next-btn" class="action-btn" onclick="nextCard()">Next <i class="fas fa-arrow-right"></i></button>
-        </div>
-      </div>
-      
-      <div class="navigation">
-        <a href="/index.html" class="action-btn"><i class="fas fa-home"></i> Home</a>
-        <a href="/quiz.html" class="action-btn"><i class="fas fa-question-circle"></i> Quiz</a>
-      </div>
-    </main>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script src="/js/flashcards.js"></script>
-</body>
-</html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Abhyasam · Flashcards</title><link rel="stylesheet" href="/css/quiz.css?v=flip8"><link rel="stylesheet" href="/css/study.css?v=flip8"></head>
+<body><header><a class="brand" href="/index.html">◈ Abhyasam</a><nav class="mode-nav" aria-label="Study modes"><a href="/quiz.html">MCQ quizzes</a><a href="/chat.html">Ask your notes</a><a href="/short-answer.html">Short answers</a><a href="/flashcards.html">Flashcards</a></nav></header><main><section class="heading"><p class="eyebrow">YOUR STUDY WORKSPACE</p><h1>Flashcards</h1><p>Choose a Notion page and build a deck for a focused recall session.</p></section><section class="panel"><form id="deck-form" class="controls"><label>Notion page<select id="page-select" required><option value="">Choose a page</option></select></label><label>Cards<input id="card-count" type="number" min="1" max="20" value="5" required></label><button id="generate-btn" type="submit">Generate deck ↗</button></form><p id="page-title-display" class="hint">Choose the page you want to practise.</p><div id="flashcard-viewer" hidden><div class="flashcard-scene"><button id="flip-card" class="flip-card" aria-label="Flip flashcard" aria-pressed="false"><span id="active-flashcard" class="flashcard-inner"><span id="front-face" class="flashcard-face flashcard-front"><span class="eyebrow">QUESTION</span><span id="flashcard-front-content" class="flashcard-content"></span><span class="flip-hint">Click or press Enter to reveal the answer ↻</span></span><span id="back-face" class="flashcard-face flashcard-back" aria-hidden="true"><span class="eyebrow">ANSWER</span><span id="flashcard-back-content" class="flashcard-content"></span><span class="flip-hint">Click to return to the question ↻</span></span></span></button></div><div class="actions deck-navigation"><button id="prev-btn" class="secondary">← Previous</button><span id="flashcard-counter"></span><button id="next-btn" class="secondary">Next →</button></div></div></section><section aria-label="Flashcard library"><div class="section-heading"><h2>Your flashcard decks</h2><span id="deck-library-count"></span></div><p class="hint">Keep up to 10 decks. Load a deck to practise or clear one to make room.</p><div id="deck-library" class="sets"></div></section><p id="status" role="status" aria-live="polite"></p></main>
+<script src="/js/deployment-config.js?v=flip8"></script><script src="/js/config.js?v=flip8"></script><script src="/js/study.js?v=flip8"></script><script src="/js/flashcards.js?v=flip8"></script></body></html>
