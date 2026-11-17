@@ -41,7 +41,7 @@ async function library() {
       await request("/api/mcq/sets/" + set.id, {method:"PATCH", headers:{"Content-Type":"application/json"}, body:JSON.stringify({title})});
       await library();
     }, "secondary"), button("Clear", async () => {
-      if (!confirm("Clear " + set.title + "? Its storage slot will be reused.")) return;
+      if (!confirm("Delete " + set.title + "? This removes it from your quiz library.")) return;
       await request("/api/mcq/sets/" + set.id, {method:"DELETE"}); await library();
     }, "secondary danger"), button("Export JSON", async () => {
       const data = await request("/api/mcq/sets/" + set.id);

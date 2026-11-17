@@ -15,6 +15,13 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from chatbot import AbhyasamChat
 from mcq_service import MCQ, MCQService, QuizGenerationError, grade
+
+# Try to use optimized service if available
+try:
+    from mcq_service_optimized import MCQServiceOptimized
+    USE_OPTIMIZED_MCQ = True
+except ImportError:
+    USE_OPTIMIZED_MCQ = False
 from notion_loader import NotionPageLoader
 from populate_vectors import sync_notion_pages
 from question_bank import (
@@ -239,7 +246,9 @@ def submit_quiz_answer(req: SubmitAnswerRequest) -> dict:
 
 def create_mcq(req: MCQRequest) -> dict:
     try:
-        result = MCQService(get_chatbot()).generate(
+        # Use optimized service if available (much faster, 94% fewer tokens)
+        service_class = MCQServiceOptimized if USE_OPTIMIZED_MCQ else MCQService
+        result = service_class(get_chatbot()).generate(
             req.topic_query, req.num_questions, req.page_title, req.title,
         )
         return {"status": "success", **{key: value for key, value in result.items() if key != "questions"}}
@@ -307,7 +316,7 @@ def rename_mcq(set_id: str, req: RenameQuizRequest) -> dict:
 @app.delete("/api/question-sets/{set_id}", deprecated=True, tags=["Legacy compatibility"])
 def delete_question_set_by_id(set_id: str) -> dict:
     delete_question_set(set_id)
-    return {"status": "success", "cleared": set_id}
+    return {"status": "success", "deleted": set_id}
 
 
 # Each generated flashcard deck is persisted independently in GCS.
@@ -335,7 +344,7 @@ def get_flashcard_decks() -> dict:
 @app.delete("/api/flashcard-decks/{deck_id}", tags=["Flashcards"])
 def remove_flashcard_deck(deck_id: str) -> dict:
     delete_deck(deck_id)
-    return {"status": "success", "cleared": deck_id}
+    return {"status": "success", "deleted": deck_id}
 
 
 @app.get("/api/health")

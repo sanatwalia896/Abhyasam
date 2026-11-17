@@ -19,11 +19,10 @@ sequential; the UI disables submission while a request is pending.
 The app supports up to 10 MCQ sets and 10 flashcard decks independently. The
 private `system/locks/` objects are short-lived coordination leases used for
 creation limits across Cloud Run instances; they use the same bucket permissions.
-Clear unwanted decks through the flashcard library rather than auto-evicting them.
-The DELETE API calls now empty their JSON and reuse the same object names. Empty
-slots do not count against the ten-set/deck limit. Quiz revisions prevent stale
-submissions after a slot is reused. GCS soft delete can retain overwritten object
-generations too, so this behavior alone does not eliminate retention charges.
+Delete unwanted quizzes and decks through their library actions. Each new item
+gets a unique GCS object name, and DELETE removes the active object with a
+generation check. GCS soft delete can retain deleted object generations for the
+configured retention period, but deleted items no longer appear in the API.
 
 ## 1. Choose your deployment settings
 

@@ -123,6 +123,9 @@ class AbhyasamRAG:
                     "page_id": page_id,
                     "chunk_index": chunk_index,
                     "text": text[:1000],
+                    "block_id": metadata.get("block_id", ""),
+                    "block_type": metadata.get("block_type", ""),
+                    "block_index": metadata.get("block_index", -1),
                 })
 
                 vectors.append({
@@ -152,11 +155,44 @@ class AbhyasamRAG:
         print(f"Deleted {len(ids)} stale vectors for page {page_id}")
 
 
-def split_page(page_id: str, title: str, content: str) -> list[Document]:
+def split_page(page_id: str, title: str, content: str, blocks: list[dict] = None) -> list[Document]:
+    """Split page content into chunks, preserving block_id metadata when available."""
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=500,
         chunk_overlap=50,
     )
+
+    # If blocks are provided, process each block separately to preserve block_id
+    if blocks:
+        all_chunks = []
+        chunk_counter = 0
+
+        for block_idx, block in enumerate(blocks):
+            block_text = block.get("text", "").strip()
+            if not block_text:
+                continue
+
+            block_doc = Document(
+                page_content=block_text,
+                metadata={
+                    "source": "Notion",
+                    "page_id": page_id,
+                    "page_title": title,
+                    "block_id": block.get("block_id", ""),
+                    "block_type": block.get("block_type", "unknown"),
+                    "block_index": block_idx,
+                },
+            )
+
+            block_chunks = splitter.split_documents([block_doc])
+            for chunk in block_chunks:
+                chunk.metadata["chunk_index"] = chunk_counter
+                chunk_counter += 1
+                all_chunks.append(chunk)
+
+        return all_chunks
+
+    # Fallback: original behavior for backward compatibility
     source = Document(
         page_content=content,
         metadata={
@@ -216,7 +252,8 @@ def sync_notion_pages(force: bool = False, dry_run: bool = False) -> dict[str, i
                 print(f"[{position}/{len(page_ids)}] Unchanged: {title}")
                 continue
 
-            documents = split_page(page_id, title, content)
+            # Pass blocks to preserve block_id metadata
+            documents = split_page(page_id, title, content, blocks=blocks)
             new_count = len(documents)
             old_count = int(previous.get("chunk_count", 0))
 

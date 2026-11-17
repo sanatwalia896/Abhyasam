@@ -11,7 +11,7 @@ from uuid import uuid4
 from google.api_core.exceptions import NotFound
 from google.cloud import storage
 from collection_limit import limited_collection
-from storage_slots import is_empty_slot, reusable_slot, clear_slot, slot_data
+from storage_slots import is_empty_slot, slot_data
 
 
 PREFIX = "quiz/question_sets/"
@@ -127,12 +127,15 @@ def save_question_set(
     }
     bucket, _ = _blob(PREFIX)
     with limited_collection(PREFIX, MAX_SETS):
-        blob, set_id, generation_match = reusable_slot(bucket, PREFIX, MAX_SETS)
+        # Every quiz gets a unique object. The collection lock still enforces
+        # the ten-set limit, while physical deletion keeps storage state simple.
+        set_id = uuid4().hex
+        blob = bucket.blob(f"{PREFIX}{set_id}.json")
         data["id"] = set_id
         blob.upload_from_string(
             json.dumps(data, indent=2, ensure_ascii=False) + "\n",
             content_type="application/json",
-            if_generation_match=generation_match,
+            if_generation_match=0,
             timeout=30,
             retry=None,
         )
@@ -153,4 +156,9 @@ def rename_question_set(set_id: str, title: str) -> dict[str, Any]:
 def delete_question_set(set_id: str) -> None:
     _, blob = _blob(f"{PREFIX}{set_id}.json")
     with limited_collection(PREFIX, MAX_SETS, check_capacity=False):
-        clear_slot(blob, "questions", "id", set_id)
+        try:
+            blob.reload(timeout=30)
+            blob.delete(if_generation_match=blob.generation, timeout=30, retry=None)
+        except NotFound:
+            # DELETE is idempotent for stale UI entries and repeated clicks.
+            return

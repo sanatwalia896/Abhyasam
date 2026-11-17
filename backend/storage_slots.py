@@ -1,4 +1,4 @@
-"""Reuse cleared GCS object names instead of creating new quiz/deck filenames."""
+"""Shared helpers for counting active JSON objects in GCS collections."""
 import json
 
 from google.api_core.exceptions import NotFound
@@ -10,7 +10,14 @@ def is_empty_slot(data, field):
 
 def slot_data(blob):
     from question_bank import QuizStorageError
-    raw = blob.download_as_text(timeout=30)
+    try:
+        raw = blob.download_as_text(timeout=30)
+    except NotFound:
+        # GCS listings and a subsequent read are separate operations. A slot
+        # can disappear between them (manual cleanup, lifecycle rules, or a
+        # concurrent replacement). Treat that object as stale/empty so one
+        # missing slot cannot break the whole library listing or capacity check.
+        return {}
     try:
         return json.loads(raw) if raw.strip() else {}
     except json.JSONDecodeError as error:
@@ -33,7 +40,12 @@ def reusable_slot(bucket, prefix, limit=10):
     blobs = sorted((blob for blob in bucket.list_blobs(prefix=prefix) if blob.name.endswith(".json")), key=lambda blob: blob.name)
     for blob in blobs:
         if is_empty_slot(slot_data(blob), field):
-            blob.reload(timeout=30)
+            try:
+                blob.reload(timeout=30)
+            except NotFound:
+                # The object disappeared after list_blobs/download_as_text;
+                # continue looking for another reusable slot.
+                continue
             return blob, blob.name[len(prefix):-5], blob.generation
     existing = {blob.name for blob in blobs}
     for number in range(1, limit + 1):

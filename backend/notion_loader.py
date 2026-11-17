@@ -150,11 +150,16 @@ class NotionPageLoader:
             page_id (str): Notion page ID.
 
         Returns:
-            List of block data (text, timestamp).
+            List of block data (text, timestamp, block_id, block_type).
         """
         blocks = self.get_block_children(page_id)
         result = []
         for block in blocks:
             text = self.get_block_content(block)
-            result.append({"text": text, "timestamp": block.get("last_edited_time")})
+            result.append({
+                "text": text,
+                "timestamp": block.get("last_edited_time"),
+                "block_id": block.get("id", ""),
+                "block_type": block.get("type", "unknown"),
+            })
         return result

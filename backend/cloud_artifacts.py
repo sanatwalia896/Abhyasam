@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from google.api_core.exceptions import NotFound
 from question_bank import _blob, QuizStorageError, QuizLimitError
 from collection_limit import limited_collection
-from storage_slots import is_empty_slot, reusable_slot, clear_slot
+from storage_slots import is_empty_slot
 
 DECK_PREFIX = "flashcards/decks/"
 MAX_DECKS = 10
@@ -37,7 +37,12 @@ def ensure_deck_capacity():
 def delete_deck(deck_id):
     _, blob = _blob(f"{DECK_PREFIX}{deck_id}.json")
     with limited_collection(DECK_PREFIX, MAX_DECKS, check_capacity=False):
-        clear_slot(blob, "flashcards", "deck_id", deck_id)
+        try:
+            blob.reload(timeout=30)
+            blob.delete(if_generation_match=blob.generation, timeout=30, retry=None)
+        except NotFound:
+            # DELETE is idempotent for stale UI entries and repeated clicks.
+            return
 
 
 def write_json(name, data):
@@ -60,10 +65,13 @@ def save_deck(cards, page_title):
             "created_at": datetime.now(timezone.utc).isoformat()}
     bucket, _ = _blob(DECK_PREFIX)
     with limited_collection(DECK_PREFIX, MAX_DECKS):
-        blob, deck_id, generation_match = reusable_slot(bucket, DECK_PREFIX, MAX_DECKS)
+        # Every deck gets a unique object. Physical deletion avoids stale
+        # empty-slot generations and keeps listing logic straightforward.
+        deck_id = uuid4().hex
+        blob = bucket.blob(f"{DECK_PREFIX}{deck_id}.json")
         data["deck_id"] = deck_id
         blob.upload_from_string(json.dumps(data, ensure_ascii=False), content_type="application/json",
-                                if_generation_match=generation_match, timeout=30, retry=None)
+                                if_generation_match=0, timeout=30, retry=None)
     return data
 
 

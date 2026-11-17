@@ -20,10 +20,10 @@ document.addEventListener("DOMContentLoaded",()=>{
      const load=document.createElement("button");load.textContent="Study deck";
      load.onclick=async()=>{try{await loadDeck(item.deck_id);}catch(e){S.status(e.message,true);}};
      const remove=document.createElement("button");remove.textContent="Clear";remove.className="secondary danger";
-     remove.onclick=async()=>{if(!confirm("Clear this deck? Its storage slot will be reused."))return;remove.disabled=true;
+     remove.onclick=async()=>{if(!confirm("Delete this deck? This removes it from your flashcard library."))return;remove.disabled=true;
        try{await S.request("/api/flashcard-decks/"+encodeURIComponent(item.deck_id),undefined,"DELETE");
          if(activeDeck===item.deck_id){cards=[];$("flashcard-viewer").hidden=true;activeDeck=null;const url=new URL(location.href);url.searchParams.delete("deck_id");history.replaceState(null,"",url);}
-         await library();S.status("Deck cleared. Its storage slot is available for a new deck.");
+         await library();S.status("Deck deleted. You can generate a new deck.");
        }catch(e){S.status(e.message,true);remove.disabled=false;}
      };
      actions.append(load,remove);card.append(title,description,actions);$("deck-library").append(card);
