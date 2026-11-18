@@ -36,7 +36,9 @@ class StorageTests(unittest.TestCase):
             SimpleNamespace(content='{"questions":[]}'),
         ]))
         chat = SimpleNamespace(llm=llm, _parse_json=json.loads)
-        self.assertEqual(MCQService(chat)._generate_json("prompt"), {"questions": []})
+        result = MCQService(chat)._generate_json("prompt")
+        self.assertEqual(result["questions"], [])
+        self.assertEqual(result["decision"], "skip")
         self.assertEqual(llm.invoke.call_count, 2)
 
     def test_repeated_bad_output_has_generation_error(self):

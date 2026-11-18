@@ -66,6 +66,7 @@ class BufferTests(unittest.TestCase):
 
 class GenerationBufferTests(unittest.TestCase):
     def test_stops_immediately_at_ten_accepted_questions(self):
+        terms = ["closures", "arrays", "objects", "promises", "events", "modules", "classes", "prototypes", "iterators", "generators", "exceptions", "operators", "symbols", "strings", "numbers", "maps", "sets", "types", "errors", "scopes"]
         texts = [
             "How does lexical scope determine variable visibility?",
             "Which keyword creates a mutable block scoped binding?",
@@ -81,11 +82,11 @@ class GenerationBufferTests(unittest.TestCase):
         def respond(payload):
             self.assertFalse(payload['final_attempt'])
             current = payload['current_chunk']
-            self.assertLess(current['chunk_index'], 10)
-            return decision('generate', [question([current['id']], texts[current['chunk_index']])])
-        docs = [doc('A', i, f'Independent source passage {i} about a useful programming concept.') for i in range(20)]
+            term = terms[current['chunk_index']]
+            return decision('generate', [question([current['id']], f"Why does {term} demonstrate a distinct programming concept in this lesson?")])
+        docs = [doc('A', i, f'Independent source passage {i} explains a useful programming concept with enough detail for a student to reason about its behavior.') for i in range(20)]
         service, inputs = self.run_generator(docs, respond)
-        with patch('mcq_service.list_question_sets', return_value=[]), patch('mcq_service.save_question_set', return_value={'id': 'saved'}) as save:
+        with patch('mcq_service.random.sample', lambda population, count: list(population)[:count]), patch('mcq_service.random.shuffle', lambda items: None), patch('mcq_service.is_duplicate', side_effect=lambda q, existing: q in existing), patch('mcq_service.list_question_sets', return_value=[]), patch('mcq_service.save_question_set', return_value={'id': 'saved'}) as save:
             result = service.generate('JavaScript', 10)
         self.assertEqual(result['generated_count'], 10)
         self.assertEqual(len(inputs), 10)
@@ -95,7 +96,7 @@ class GenerationBufferTests(unittest.TestCase):
     def run_generator(self, docs, respond, requested=10):
         inputs = []
         def invoke(prompt):
-            payload = json.loads(prompt.split("\nInput JSON:\n")[1])
+            payload = json.loads(prompt.split("\nInput:\n", 1)[1])
             inputs.append(payload)
             return SimpleNamespace(content=json.dumps(respond(payload)))
         chat = SimpleNamespace(_retrieve=lambda *args, **kwargs: docs,
@@ -103,8 +104,8 @@ class GenerationBufferTests(unittest.TestCase):
         return MCQService(chat), inputs
 
     def test_page_order_and_cross_chunk_evidence_without_cross_page_leak(self):
-        docs = [doc("B", 0, "Neural networks use layers."), doc("A", 1, "Returned callbacks retain their lexical environment."),
-                doc("A", 0, "Closures are a mechanism that will be explained next.")]
+        docs = [doc("B", 0, "Neural networks use layers and combine learned representations to model complex patterns."), doc("A", 1, "Returned callbacks retain their lexical environment after the enclosing function returns."),
+                doc("A", 0, "Closures are a mechanism that will be explained next using lexical scope and retained variables.")]
         def respond(payload):
             current = payload["current_chunk"]
             if current["page_id"] == "B":
@@ -115,7 +116,7 @@ class GenerationBufferTests(unittest.TestCase):
             self.assertEqual(previous["chunk_index"], 0)
             return decision("generate", [question([previous["id"], current["id"]])])
         service, inputs = self.run_generator(docs, respond)
-        with patch("mcq_service.list_question_sets", return_value=[]), patch("mcq_service.save_question_set", return_value={"id": "saved"}) as save:
+        with patch("mcq_service.random.sample", lambda population, count: list(population)[:count]), patch("mcq_service.random.shuffle", lambda items: None), patch("mcq_service.list_question_sets", return_value=[]), patch("mcq_service.save_question_set", return_value={"id": "saved"}) as save:
             result = service.generate("closures", 10)
         self.assertEqual(result["generated_count"], 1)
         self.assertEqual(len(result["questions"][0]["source_chunk_ids"]), 2)
@@ -128,7 +129,7 @@ class GenerationBufferTests(unittest.TestCase):
                 self.assertIsNone(payload["current_chunk"])
                 return decision("generate", [question([payload["pending_context"][0]["id"]])])
             return decision("defer")
-        service, inputs = self.run_generator([doc("A", 0, "Callbacks retain the enclosing lexical environment.")], respond)
+        service, inputs = self.run_generator([doc("A", 0, "Callbacks retain the enclosing lexical environment after the enclosing function returns.")], respond)
         with patch("mcq_service.list_question_sets", return_value=[]), patch("mcq_service.save_question_set", return_value={"id": "saved"}):
             self.assertEqual(service.generate("closures", 10)["generated_count"], 1)
             self.assertEqual(service.generate("closures", 10)["generated_count"], 1)
@@ -157,10 +158,11 @@ class GenerationBufferTests(unittest.TestCase):
         service, inputs = self.run_generator([doc("A", 0, "A heading")], respond)
         with patch("mcq_service.list_question_sets", return_value=[]), patch("mcq_service.save_question_set"):
             with self.assertRaises(ValueError): service.generate("closures", 10)
-        self.assertEqual(len(inputs), 1)  # No retained passage => no final attempt.
+        self.assertEqual(len(inputs), 0)  # The short heading is filtered before model invocation.
 
     def test_same_text_on_different_pages_keeps_distinct_sources(self):
-        result = unique_sources([doc("A", 0, "Lexical scope"), doc("B", 0, "Lexical scope")])
+        text = "Lexical scope determines how variables are resolved and remains a distinct concept on each source page."
+        result = unique_sources([doc("A", 0, text), doc("B", 0, text)])
         self.assertEqual(len(result), 2)
         self.assertNotEqual(result[0]["id"], result[1]["id"])
 

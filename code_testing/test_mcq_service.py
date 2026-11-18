@@ -29,7 +29,7 @@ class MCQTests(unittest.TestCase):
             calls = 0
 
             def invoke(self, prompt):
-                payload = json.loads(prompt.split("\nInput JSON:\n")[1])
+                payload = json.loads(prompt.split("\nInput:\n", 1)[1])
                 group = [payload["current_chunk"]] if payload["current_chunk"] else payload["pending_context"]
                 questions = []
                 for source in group:

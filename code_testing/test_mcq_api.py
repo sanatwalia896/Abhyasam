@@ -23,11 +23,14 @@ class APITests(unittest.TestCase):
             spec.loader.exec_module(cls.module)
         cls.client = TestClient(cls.module.app)
 
+    def mcq_service_class(self):
+        return self.module.MCQServiceOptimized if self.module.USE_OPTIMIZED_MCQ else self.module.MCQService
+
     def test_generation_payload_and_response(self):
         result = {"set_id": "saved", "requested_count": 100, "unique_chunks": 15,
                   "capacity": 30, "target_count": 30, "generated_count": 30,
                   "capacity_basis": "retrieved", "topic_query": "JavaScript", "questions": []}
-        with patch.object(self.module.MCQService, "generate", return_value=result) as generate:
+        with patch.object(self.mcq_service_class(), "generate", return_value=result) as generate:
             response = self.client.post("/api/mcq/sets/generate", json={"num_questions": 100, "topic_query": "JavaScript"})
         self.assertEqual(response.status_code, 201, response.text)
         self.assertEqual(response.json()["capacity"], 30)
@@ -89,12 +92,12 @@ class APITests(unittest.TestCase):
         self.assertIn("Stored quiz", response.json()["detail"])
 
     def test_library_limit_returns_conflict(self):
-        with patch.object(self.module.MCQService, "generate", side_effect=self.module.QuizLimitError("Library full")):
+        with patch.object(self.mcq_service_class(), "generate", side_effect=self.module.QuizLimitError("Library full")):
             response = self.client.post("/api/mcq/sets/generate", json={"num_questions": 10})
         self.assertEqual(response.status_code, 409)
 
     def test_groq_limit_returns_retry_after(self):
-        with patch.object(self.module.MCQService, "generate", side_effect=self.module.ProviderRateLimitError(25)):
+        with patch.object(self.mcq_service_class(), "generate", side_effect=self.module.ProviderRateLimitError(25)):
             response=self.client.post('/api/mcq/sets/generate',json={'num_questions':10})
         self.assertEqual(response.status_code,429)
         self.assertEqual(response.headers['retry-after'],'25')
