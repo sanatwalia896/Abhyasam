@@ -1,11 +1,8 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "backend/main.py", "use": "@vercel/python" }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "backend/main.py" }
-  ]
+  "buildCommand": "node scripts/build-frontend.mjs",
+  "outputDirectory": "frontend",
+  "framework": null
 }
 
 
