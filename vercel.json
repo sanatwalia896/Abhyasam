@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 2,
   "buildCommand": "node scripts/build-frontend.mjs",
   "outputDirectory": "frontend",
   "framework": null
