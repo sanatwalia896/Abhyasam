@@ -23,7 +23,17 @@ window.Study = {
   },
   message(id, role, text) {
     const area=document.getElementById(id);area.querySelector(".empty")?.remove();
-    const element=document.createElement("div");element.className="message "+role;element.textContent=text;
+    const element=document.createElement("div");element.className="message "+role;
+    try {
+      if (typeof marked !== 'undefined' && marked.parse) {
+        element.innerHTML=marked.parse(text);
+      } else {
+        element.textContent=text;
+      }
+    } catch (e) {
+      console.error('Markdown parsing error:', e);
+      element.textContent=text;
+    }
     area.append(element);area.scrollTop=area.scrollHeight;
   }
 };

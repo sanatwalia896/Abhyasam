@@ -68,7 +68,16 @@ function render() {
   $("question-counter").textContent = "Question " + (index+1) + " of " + questions.length;
   $("progress-label").textContent = Object.keys(answers).length + " / " + questions.length + " answered";
   $("progress").value = Object.keys(answers).length * 100 / questions.length;
-  $("question-text").textContent = q.question;
+  try {
+    if (typeof marked !== 'undefined' && marked.parse) {
+      $("question-text").innerHTML = marked.parse(q.question);
+    } else {
+      $("question-text").textContent = q.question;
+    }
+  } catch (e) {
+    console.error('Markdown parsing error:', e);
+    $("question-text").textContent = q.question;
+  }
   $("bookmark-btn").textContent = bookmarks.has(index) ? "★ Bookmarked" : "☆ Bookmark";
   $("options").replaceChildren();
   "ABCD".split("").forEach(letter => {
@@ -107,15 +116,45 @@ async function submit() {
     $("review").replaceChildren(); $("review").hidden=true;
     result.review.forEach((q, i) => {
       const card=document.createElement("article");card.className="panel review-item";
-      const title=document.createElement("h2");title.textContent=(i+1)+". "+q.question;
+      const title=document.createElement("h2");
+      try {
+        if (typeof marked !== 'undefined' && marked.parse) {
+          title.innerHTML=(i+1)+". "+marked.parse(q.question).replace(/<\/?p>/g, '');
+        } else {
+          title.textContent=(i+1)+". "+q.question;
+        }
+      } catch (e) {
+        title.textContent=(i+1)+". "+q.question;
+      }
       const result=document.createElement("p");result.className=q.correct?"correct":"incorrect";
       result.textContent=q.correct?"Correct":"Your answer: "+(q.selected || "Unanswered");
       card.append(title,result);
       "ABCD".split("").forEach(letter => {
-        const option=document.createElement("p");option.textContent=letter+". "+q.options[letter];
+        const option=document.createElement("p");
+        try {
+          if (typeof marked !== 'undefined' && marked.parse) {
+            option.innerHTML=letter+". "+marked.parse(q.options[letter]).replace(/<\/?p>/g, '');
+          } else {
+            option.textContent=letter+". "+q.options[letter];
+          }
+        } catch (e) {
+          option.textContent=letter+". "+q.options[letter];
+        }
         if(letter===q.answer)option.className="correct";card.append(option);
       });
-      const explanation=document.createElement("p");explanation.textContent=q.explanation || "";card.append(explanation);
+      const explanation=document.createElement("p");
+      if (q.explanation) {
+        try {
+          if (typeof marked !== 'undefined' && marked.parse) {
+            explanation.innerHTML=marked.parse(q.explanation);
+          } else {
+            explanation.textContent=q.explanation;
+          }
+        } catch (e) {
+          explanation.textContent=q.explanation;
+        }
+      }
+      card.append(explanation);
       $("review").append(card);
     });
   } catch(error){status(error.message,true);}

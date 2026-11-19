@@ -1,7 +1,19 @@
 document.addEventListener("DOMContentLoaded",()=>{
  const S=window.Study,$=id=>document.getElementById(id);let cards=[],index=0,flipped=false;
  function render(){if(!cards.length)return;$("flashcard-viewer").hidden=false;
-   $("flashcard-front-content").textContent=cards[index].front;$("flashcard-back-content").textContent=cards[index].back;
+   try {
+     if (typeof marked !== 'undefined' && marked.parse) {
+       $("flashcard-front-content").innerHTML=marked.parse(cards[index].front);
+       $("flashcard-back-content").innerHTML=marked.parse(cards[index].back);
+     } else {
+       $("flashcard-front-content").innerHTML=cards[index].front.replace(/\n/g, '<br>');
+       $("flashcard-back-content").innerHTML=cards[index].back.replace(/\n/g, '<br>');
+     }
+   } catch (e) {
+     console.error('Markdown parsing error:', e);
+     $("flashcard-front-content").textContent=cards[index].front;
+     $("flashcard-back-content").textContent=cards[index].back;
+   }
    $("active-flashcard").classList.toggle("is-flipped",flipped);$("flip-card").setAttribute("aria-pressed",String(flipped));
    $("front-face").setAttribute("aria-hidden",String(flipped));$("back-face").setAttribute("aria-hidden",String(!flipped));
    $("flashcard-counter").textContent=(index+1)+" / "+cards.length;$("prev-btn").disabled=index===0;$("next-btn").disabled=index===cards.length-1;
